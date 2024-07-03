@@ -18,9 +18,10 @@ check_point_path = 'E:/Pycharm_Projects/baseline_model/interface/m01/H_curr_ck.p
 model, _, _ = load_ckp(check_point_path, model, optimizer)
 في حال تصنيق نص نقوم بتحميل ملف ال classifier الذي يحوي التابع الذي يقوم بالتصنيف.
 
- *********OR for loading a model**********
+'''# *********OR for loading a model**********
 from baseline_model.functions.classifier import classifier
 
-text = 'النص المراد اختباره'\n
+text = 'النص المراد اختباره'
 res = classifier(model=model, text=text)
 print(res)
+'''
