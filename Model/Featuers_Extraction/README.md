@@ -12,7 +12,7 @@
 3. Decision Tree Classifier
 4. Extra Tree Classifier
 5. Random Forest Classifier
-6. Linear SVC -6
+6. Linear SVC
 7. SVM Classifier
 8. NuSVC
 9. SGD Classifier
