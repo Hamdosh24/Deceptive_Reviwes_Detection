@@ -21,6 +21,6 @@ model, _, _ = load_ckp(check_point_path, model, optimizer)
  *********OR for loading a model**********
 from baseline_model.functions.classifier import classifier
 
-text = 'النص المراد اختباره'
+text = 'النص المراد اختباره'\n
 res = classifier(model=model, text=text)
 print(res)
