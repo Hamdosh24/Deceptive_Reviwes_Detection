@@ -16,7 +16,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryIcon from "@mui/icons-material/History";
 import LogoutIcon from "@mui/icons-material/Logout";
-import InfoIcon from "@mui/icons-material/Info";
+// import InfoIcon from "@mui/icons-material/Info";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
@@ -37,7 +37,7 @@ export default function Sidebar() {
     setOpen(newOpen);
   };
 
-  const userName = "Nour Alassad"; // استبدل هذا باسم المستخدم الفعلي
+  const userName = "Nour Alassad"; 
 
   const DrawerList = (
     <Box

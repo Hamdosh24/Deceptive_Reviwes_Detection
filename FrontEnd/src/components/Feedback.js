@@ -18,7 +18,7 @@ const Feedback = () => {
   const handleAddFeedback = () => {
     if (feedback.trim()) {
       setFeedbackList([...feedbackList, feedback]);
-      setFeedback(""); // Clear the input after adding
+      setFeedback("");
     }
   };
 

@@ -1,60 +1,96 @@
-import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LoadingPage from "./Loading";
-import Mainpage from "./Mainpage";
-import SignIn from "./LogIn";
-import SignUp from "./sign_up";
-import Fetch from "./Fetch";
-import History from "./History";
-import Feedback from "./Feedback";
-import About from "./About";
-import Edit from "./Edit";
+import React, { Suspense, lazy } from "react";  
+import { createBrowserRouter, RouterProvider } from "react-router-dom";  
+import LandingPage from "./Landing";
+import LoadingPage from "./LoadingPage";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <LoadingPage />,
-  },
-  {
-    path: "/main",
-    element: <Mainpage />,
-  },
-  {
-    path: "/sign-up",
-    element: <SignUp />,
-  },
-  {
-    path: "/sign-in",
-    element: <SignIn />,
-  },
-  {
-    path: "/fetch",
-    element: <Fetch />,
-  },
-  {
-    path: "/history",
-    element: <History />,
-  },
-  {
-    path: "/feedback",
-    element: <Feedback />,
-  },
-  {
-    path: "/about",
-    element: <About />,
-  },
-  {
-    path: "/edit",
-    element: <Edit />,
-  },
-]);
+const SignIn = lazy(() => import("./LogIn"));  
+const Decaptive = lazy(() => import("./Decaptive"));  
+const SignUp = lazy(() => import("./sign_up"));  
+const Fetch = lazy(() => import("./Fetch"));  
+const History = lazy(() => import("./History"));  
+const Feedback = lazy(() => import("./Feedback"));  
+const About = lazy(() => import("./About"));  
+const Edit = lazy(() => import("./Edit"));  
 
-const App = () => {
-  return (
-    <>
-      <RouterProvider router={router} future={{ v7_startTransition: true }} />
-    </>
-  );
-};
+const router = createBrowserRouter([  
+  {  
+    path: "/",  
+    element: (  
+      <Suspense fallback={<LoadingPage />}>  
+        <LandingPage />  
+      </Suspense>  
+    ),  
+  },  
+  {  
+    path: "/main",  
+    element: (  
+      <Suspense fallback={<LoadingPage />}>  
+        <Decaptive />  
+      </Suspense>  
+    ),  
+  },  
+  {  
+    path: "/sign-up",  
+    element: (  
+      <Suspense fallback={<LoadingPage />}>  
+        <SignUp />  
+      </Suspense>  
+    ),  
+  },  
+  {  
+    path: "/sign-in",  
+    element: (  
+      <Suspense fallback={<LoadingPage />}>  
+        <SignIn />  
+      </Suspense>  
+    ),  
+  },  
+  {  
+    path: "/fetch",  
+    element: (  
+      <Suspense fallback={<LoadingPage />}>  
+        <Fetch />  
+      </Suspense>  
+    ),  
+  },  
+  {  
+    path: "/history",  
+    element: (  
+      <Suspense fallback={<LoadingPage />}>  
+        <History />  
+      </Suspense>  
+    ),  
+  },  
+  {  
+    path: "/feedback",  
+    element: (  
+      <Suspense fallback={<LoadingPage />}>  
+        <Feedback />  
+      </Suspense>  
+    ),  
+  },  
+  {  
+    path: "/about",  
+    element: (  
+      <Suspense fallback={<LoadingPage />}>  
+        <About />  
+      </Suspense>  
+    ),  
+  },  
+  {  
+    path: "/edit",  
+    element: (  
+      <Suspense fallback={<LoadingPage />}>  
+        <Edit />  
+      </Suspense>  
+    ),  
+  },  
+]);  
+
+const App = () => {  
+  return (  
+    <RouterProvider router={router} future={{ v7_startTransition: true }} />  
+  );  
+};  
 
 export default App;
