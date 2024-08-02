@@ -17,12 +17,10 @@ const Edit = () => {
   const [password, setPassword] = useState("");
 
   const handleSave = () => {
-    // هنا يمكنك تنفيذ عملية الحفظ، مثل إرسال البيانات إلى API
     console.log("First Name:", firstName);
     console.log("Last Name:", lastName);
     console.log("Password:", password);
 
-    // يمكنك استخدام تنبيه للمستخدم للإشارة إلى أن الحفظ تم
     alert("Save Successfully");
   };
 

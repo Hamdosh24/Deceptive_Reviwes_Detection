@@ -164,22 +164,22 @@ const History = () => {
   function handleDelete() {
     const newRecords = records.filter((row) => !selectedRows.includes(row));
     setRecords(newRecords);
-    setSelectedRows([]); // إعادة تعيين الصفوف المحددة بعد الحذف
+    setSelectedRows([]);
   }
 
   const customStyles = {
     rows: {
       style: {
-        fontSize: "16px", // حجم الخط
-        fontFamily: "Arial, sans-serif", // نوع الخط
+        fontSize: "16px",
+        fontFamily: "Arial, sans-serif", 
       },
     },
     headCells: {
       style: {
-        fontSize: "18px", // حجم الخط لعنوان الأعمدة
-        fontFamily: "Arial, sans-serif", // نوع الخط لعنوان الأعمدة
-        fontWeight: "bold", // جعل الخط عريض
-        color: "#1976d2", // لون الخط
+        fontSize: "18px", 
+        fontFamily: "Arial, sans-serif", 
+        fontWeight: "bold", 
+        color: "#1976d2", 
       },
     },
   };
