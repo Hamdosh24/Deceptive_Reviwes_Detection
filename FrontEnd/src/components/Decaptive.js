@@ -23,21 +23,21 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const isUrl = (string) => {  
-  const pattern = new RegExp(  
-    "^(https?:\\/\\/)?(www\\.)?([a-z0-9]+[.])+[a-z]{2,3}(\\/\\S*)?$",  
-    "i"  
-  );  
-  return pattern.test(string);  
-}; 
+const isUrl = (string) => {
+  const pattern = new RegExp(
+    "^(https?:\\/\\/)?(www\\.)?([a-z0-9]+[.])+[a-z]{2,3}(\\/\\S*)?$",
+    "i"
+  );
+  return pattern.test(string);
+};
 
-const handleSend = async (text) => {  
-  if (isUrl(text)) {  
-    console.log(" _2_ Sending your request to API(URL):", text);  
-  } else {  
-    console.log("_1_ Sending your request to API (text):", text);  
-  }  
-}; 
+const handleSend = async (text) => {
+  if (isUrl(text)) {
+    console.log(" _2_ Sending your request to API(URL):", text);
+  } else {
+    console.log("_1_ Sending your request to API (text):", text);
+  }
+};
 
 const Decaptive = () => {
   const [text, setText] = useState("");
@@ -76,7 +76,7 @@ const Decaptive = () => {
               justifyContent: "center",
             }}
           >
-            <Box sx={{ width : "50%"}}>
+            <Box sx={{ width: "50%" }}>
               <Typography
                 sx={{
                   fontWeight: "bold",
@@ -106,25 +106,25 @@ const Decaptive = () => {
               alt="dcd"
             />
           </Box>
-          <StyledTextField  
-            id="demo-helper-text-misaligned"  
-            label="Text"  
-            sx={{ width: "50%", mb: 20 }}  
-            onChange={handleChange}  
-            InputProps={{  
-              endAdornment: (  
-                <SendIcon  
-                  sx={{  
-                    color: "#1976d2",  
-                    "&:hover": {  
-                      cursor: "pointer",  
-                    },  
-                  }}  
-                  onClick={() => handleSend(text)}  
-                />  
-              ),  
-            }}  
-          />  
+          <StyledTextField
+            id="demo-helper-text-misaligned"
+            label="Text"
+            sx={{ width: "50%", mb: 20 }}
+            onChange={handleChange}
+            InputProps={{
+              endAdornment: (
+                <SendIcon
+                  sx={{
+                    color: "#1976d2",
+                    "&:hover": {
+                      cursor: "pointer",
+                    },
+                  }}
+                  onClick={() => handleSend(text)}
+                />
+              ),
+            }}
+          />
         </Box>
       </Container>
       <CardMedia
@@ -140,28 +140,27 @@ const Decaptive = () => {
 
 export default Decaptive;
 
-
-          //  {/* the sentance is non fake */}
-        //    <Box
-        //    sx={{
-        //      display: "flex",
-        //      justifyContent: "center",
-        //      alignItems: "center",
-        //      width: "50%",
-        //      mt: "10px",
-        //    }}
-        //  >
-        //    <Alert
-        //      sx={{ textAlign: "right" }}
-        //      iconMapping={{
-        //        success: <CheckCircleOutlineIcon fontSize="inherit" />,
-        //      }}
-        //    >
-        //      The sun is very nice bbjvdskdn nvkdnsvdskv nnsdjvsjdv n ndnsovids
-        //      njdsvbsjvbbjs cdbsjbvi vsbvidvi hcds vsvsvsdvv
-        //    </Alert>
-        //  </Box>
-        //  {/* the sentance is Fake  */}
+//  {/* the sentance is non fake */}
+//    <Box
+//    sx={{
+//      display: "flex",
+//      justifyContent: "center",
+//      alignItems: "center",
+//      width: "50%",
+//      mt: "10px",
+//    }}
+//  >
+//    <Alert
+//      sx={{ textAlign: "right" }}
+//      iconMapping={{
+//        success: <CheckCircleOutlineIcon fontSize="inherit" />,
+//      }}
+//    >
+//      The sun is very nice bbjvdskdn nvkdnsvdskv nnsdjvsjdv n ndnsovids
+//      njdsvbsjvbbjs cdbsjbvi vsbvidvi hcds vsvsvsdvv
+//    </Alert>
+//  </Box>
+//  {/* the sentance is Fake  */}
 // {/* <Box
 //             sx={{
 //               display: "flex",
