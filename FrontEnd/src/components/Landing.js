@@ -24,7 +24,7 @@ const LandingPage = () => {
         style={{ width: "50vh" }}
         alt="dcd"
       />
-      <Container >
+      <Container>
         <Box
           sx={{
             display: "flex",
