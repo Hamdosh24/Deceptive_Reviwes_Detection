@@ -5,8 +5,8 @@ import LoadingPage from "./LoadingPage";
 import ContentDash from "../DashBoard/ContentDash";
 import AccountDash from "../DashBoard/AccountDash";
 import FeedDash from "../DashBoard/FeedDash";
-import AccountHistoryDash from "../DashBoard/AccountHistoryDash";
 import MainLanding from "../Welcome/MainLanding.js";
+import HistoryDash from "../DashBoard/AccountHistoryDash";
 
 const SignIn = lazy(() => import("./LogIn"));
 const Decaptive = lazy(() => import("./Decaptive"));
@@ -99,7 +99,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "accdash",
+    path: "accountdash",
     element: (
       <Suspense fallback={<LoadingPage />}>
         <AccountDash />
@@ -115,10 +115,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "accounthistorydash",
+    path: "HistoryDash",
     element: (
       <Suspense fallback={<LoadingPage />}>
-        <AccountHistoryDash />
+        <HistoryDash />
       </Suspense>
     ),
   },

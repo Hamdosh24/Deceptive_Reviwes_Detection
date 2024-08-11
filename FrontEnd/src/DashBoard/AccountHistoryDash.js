@@ -16,8 +16,41 @@ import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
 import MainDash from "./MainDash";
 
-const AccountHistoryDash = () => {
+const HistoryDash = () => {
   const columns = [
+    {
+      name: (
+        <Typography
+          variant="h6"
+          style={{ fontWeight: "bold", color: "#1976d2" }}
+        >
+          First Name
+        </Typography>
+      ),
+      selector: (row) => row.fname,
+    },
+    {
+      name: (
+        <Typography
+          variant="h6"
+          style={{ fontWeight: "bold", color: "#1976d2" }}
+        >
+          Last Name
+        </Typography>
+      ),
+      selector: (row) => row.lname,
+    },
+    {
+      name: (
+        <Typography
+          variant="h6"
+          style={{ fontWeight: "bold", color: "#1976d2" }}
+        >
+          Email
+        </Typography>
+      ),
+      selector: (row) => row.email,
+    },
     {
       name: (
         <Typography
@@ -56,48 +89,72 @@ const AccountHistoryDash = () => {
   const data = [
     {
       id: 1,
+      fname: "ahmad",
+      lname: "sdadsd",
+      email: "sacassa@gmail.com",
       process: "Decaptive",
       type: "text",
       input: "is the sun beautifull",
     },
     {
       id: 2,
+      fname: "asa",
+      lname: "frgre",
+      email: "freferfer@gmail.com",
       process: "fetch data",
       type: "url",
       input: "https://www.youtube.com/watch?v=3oHUtG0cjfY&t=151s",
     },
     {
       id: 3,
+      fname: "frefre",
+      lname: "gregw",
+      email: "efrwfw@gmail.com",
       process: "Decaptive",
       type: "text",
       input: "I Like my university",
     },
     {
       id: 4,
+      fname: "fehwfewsf",
+      lname: "ythtyh",
+      email: "hytnyt@gmail.com",
       process: "fetch data",
       type: "url",
       input: "https://www.youtube.com/?v=3oHUtG0cjfY&t=151s",
     },
     {
       id: 5,
+      fname: "thtyhjnytj",
+      lname: "trhth",
+      email: "ythnty@gmail.com",
       process: "Decaptive",
       type: "text",
       input: "I hate my university",
     },
     {
       id: 6,
+      fname: "myumjy",
+      lname: "jtyt",
+      email: "hrthtr@gmail.com",
       process: "Decaptive",
       type: "url",
       input: "https://www.youtube.com/watch?v=3oHUtG0cjfY&t=151s",
     },
     {
       id: 7,
+      fname: "thrhth",
+      lname: "htrht",
+      email: "htrhtr@gmail.com",
       process: "Decaptive",
       type: "text",
       input: "I Like my university",
     },
     {
       id: 8,
+      fname: "hrt",
+      lname: "verv",
+      email: "wfew@gmail.com",
       process: "Decaptive",
       type: "url",
       input:
@@ -105,24 +162,36 @@ const AccountHistoryDash = () => {
     },
     {
       id: 9,
+      fname: "csacsa",
+      lname: "dsv dsvds",
+      email: "vdsvdsv@gmail.com",
       process: "Decaptive",
       type: "text",
       input: "I hatesv vsdvvsgngh jmhjyjuhnt  my university",
     },
     {
       id: 10,
+      fname: "vdsvsvd",
+      lname: "svdsvtfr",
+      email: "sacassa@gmail.com",
       process: "fetch data",
       type: "url",
       input: "https:svsdvsvd//www.youvdsvsvtube.com/watch?v=3oHUtG0cjfY&t=151s",
     },
     {
       id: 11,
+      fname: "egregtrh",
+      lname: "gregre",
+      email: "sacassa@gmail.com",
       process: "Decaptive",
       type: "text",
       input: "I Like my university",
     },
     {
       id: 12,
+      fname: "jnytjyt",
+      lname: "jytyhn",
+      email: "hnythhr@gmail.com",
       process: "fetch data",
       type: "url",
       input:
@@ -130,24 +199,36 @@ const AccountHistoryDash = () => {
     },
     {
       id: 13,
+      fname: "tnytn",
+      lname: "nytny",
+      email: "nytny@gmail.com",
       process: "Decaptive",
       type: "text",
       input: "I havvsdvs sdvdsv svdsv sv cvfbg n v hgmnte my university",
     },
     {
       id: 14,
+      fname: "nytn",
+      lname: "nytnyt",
+      email: "ntnytn@gmail.com",
       process: "Decaptive",
       type: "text",
       input: "I Like my u dsdvds svds scvsd sniversity",
     },
     {
       id: 15,
+      fname: "trnytnytt",
+      lname: "vrever",
+      email: "nytn@gmail.com",
       process: "fetch data",
       type: "url",
       input: "sf vsdsvsvsse.com/?v=3oHUtG0cjfY&t=151s",
     },
     {
       id: 16,
+      fname: "sacasc",
+      lname: "cwefcw",
+      email: "vrwgver@gmail.com",
       process: "Decaptive",
       type: "text",
       input: "I havdsvdsdste myvdsv svd svdsv univvdsersity",
@@ -156,7 +237,7 @@ const AccountHistoryDash = () => {
 
   const [records, setRecords] = useState(data);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [searchField, setSearchField] = useState("input");
+  const [searchField, setSearchField] = useState("email");
   const [searchValue, setSearchValue] = useState("");
 
   function handleFilter(event) {
@@ -202,34 +283,41 @@ const AccountHistoryDash = () => {
         alt="dcd"
       />
       <Container>
-        <Box sx={{ mt: 9.5 }}>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
-            <FormControl sx={{ mr: 2 }}>
-              <Select
-                labelId="search-field-label"
-                value={searchField}
-                onChange={(e) => setSearchField(e.target.value)}
-              >
-                <MenuItem value="fname">First Name</MenuItem>
-                <MenuItem value="lname">Last Name</MenuItem>
-                <MenuItem value="email">Email</MenuItem>
-                <MenuItem value="process">Process</MenuItem>
-                <MenuItem value="type">Type</MenuItem>
-                <MenuItem value="input">Your Input</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              onChange={handleFilter}
-              value={searchValue}
-              id="standard-basic"
-              label="Search"
-              variant="standard"
-            />
+        <Box sx={{ mt: 8.5 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+              <FormControl sx={{ mr: 2 }}>
+                <Select
+                  labelId="search-field-label"
+                  value={searchField}
+                  onChange={(e) => setSearchField(e.target.value)}
+                >
+                  <MenuItem value="fname">First Name</MenuItem>
+                  <MenuItem value="lname">Last Name</MenuItem>
+                  <MenuItem value="email">Email</MenuItem>
+                  <MenuItem value="process">Process</MenuItem>
+                  <MenuItem value="type">Type</MenuItem>
+                  <MenuItem value="input">Input</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField
+                onChange={handleFilter}
+                value={searchValue}
+                id="standard-basic"
+                label="Search"
+                variant="standard"
+              />
+            </Box>
             <Button
               variant="outlined"
               color="error"
               onClick={handleDelete}
-              sx={{ ml: 2 }}
+              sx={{ ml: 2, display: "flex", justifyContent: "flex-end" }}
               disabled={selectedRows.length === 0}
               startIcon={<DeleteIcon />}
             >
@@ -260,4 +348,4 @@ const AccountHistoryDash = () => {
   );
 };
 
-export default AccountHistoryDash;
+export default HistoryDash;
