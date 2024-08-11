@@ -21,6 +21,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import WarningIcon from "@mui/icons-material/Warning";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import HistoryIcon from "@mui/icons-material/History";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { HomeOutlined } from "@mui/icons-material";
@@ -221,7 +222,7 @@ export default function MainDash() {
           </ListItem>
           <ListItem disablePadding sx={{ display: "block" }}>
             <Link
-              to="/accdash"
+              to="/accountdash"
               style={{ textDecoration: "none", color: "black" }}
             >
               <ListItemButton
@@ -249,7 +250,43 @@ export default function MainDash() {
                   <AccountCircle />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Account"
+                  primary="Accounts"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <Link
+              to="/HistoryDash"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <ListItemButton
+                sx={{
+                  color: "#757575",
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                  "&:hover": {
+                    color: "#1976d2",
+                  },
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "inherit",
+                    "&:hover": {
+                      color: "#1976d2",
+                    },
+                  }}
+                >
+                  <HistoryIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="History"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

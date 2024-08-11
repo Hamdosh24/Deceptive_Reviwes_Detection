@@ -15,7 +15,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
 import MainDash from "./MainDash";
-import { Link } from "react-router-dom";
 
 const AccountDash = () => {
   const columns = [
@@ -62,14 +61,6 @@ const AccountDash = () => {
         </Typography>
       ),
       selector: (row) => row.email,
-      cell: (row) => (
-        <Link
-          to="/accounthistorydash"
-          style={{ textDecoration: "none", color: "#757575" }}
-        >
-          {row.email}
-        </Link>
-      ),
     },
   ];
 
@@ -174,7 +165,7 @@ const AccountDash = () => {
 
   const [records, setRecords] = useState(data);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [searchField, setSearchField] = useState("First Name");
+  const [searchField, setSearchField] = useState("email");
   const [searchValue, setSearchValue] = useState("");
 
   function handleFilter(event) {
@@ -220,34 +211,38 @@ const AccountDash = () => {
         alt="dcd"
       />
       <Container>
-        <Box sx={{ mt: 9.5 }}>
+        <Box sx={{ mt: 8.5 }}>
           <Box
-            sx={{ display: "flex", justifyContent: "flex-end", mb: 1, mt: 15 }}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
           >
-            <Typography>User Name History</Typography>
-            <FormControl sx={{ mr: 2 }}>
-              <Select
-                labelId="search-field-label"
-                value={searchField}
-                onChange={(e) => setSearchField(e.target.value)}
-              >
-                <MenuItem value="fname">First Name</MenuItem>
-                <MenuItem value="lname">Last Name</MenuItem>
-                <MenuItem value="email">Email</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              onChange={handleFilter}
-              value={searchValue}
-              id="standard-basic"
-              label="Search"
-              variant="standard"
-            />
+            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+              <FormControl sx={{ mr: 2 }}>
+                <Select
+                  // labelId="search-field-label"
+                  value={searchField}
+                  onChange={(e) => setSearchField(e.target.value)}
+                >
+                  <MenuItem value="fname">First Name</MenuItem>
+                  <MenuItem value="lname">Last Name</MenuItem>
+                  <MenuItem value="email">Email</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField
+                onChange={handleFilter}
+                value={searchValue}
+                id="standard-basic"
+                label="Search"
+                variant="standard"
+              />
+            </Box>
             <Button
               variant="outlined"
               color="error"
               onClick={handleDelete}
-              sx={{ ml: 2 }}
+              sx={{ ml: 2, display: "flex", justifyContent: "flex-end" }}
               disabled={selectedRows.length === 0}
               startIcon={<DeleteIcon />}
             >

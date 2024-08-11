@@ -181,8 +181,8 @@ const FeedDash = () => {
 
   const [records, setRecords] = useState(data);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [searchField, setSearchField] = useState("input");
-  const [searchValue, setSearchValue] = useState("Filter");
+  const [searchField, setSearchField] = useState("feedback");
+  const [searchValue, setSearchValue] = useState("");
 
   function handleFilter(event) {
     const value = event.target.value;
@@ -228,31 +228,38 @@ const FeedDash = () => {
       />
       <Container>
         <Box sx={{ mt: 9.5 }}>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
-            <FormControl sx={{ mr: 2 }}>
-              <Select
-                labelId="search-field-label"
-                value={searchField}
-                onChange={(e) => setSearchField(e.target.value)}
-              >
-                <MenuItem value="fname">First Name</MenuItem>
-                <MenuItem value="lname">Last Name</MenuItem>
-                <MenuItem value="email">Email</MenuItem>
-                <MenuItem value="feedback">Feedback</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              onChange={handleFilter}
-              value={searchValue}
-              id="standard-basic"
-              label="Search"
-              variant="standard"
-            />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+              <FormControl sx={{ mr: 2 }}>
+                <Select
+                  labelId="search-field-label"
+                  value={searchField}
+                  onChange={(e) => setSearchField(e.target.value)}
+                >
+                  <MenuItem value="fname">First Name</MenuItem>
+                  <MenuItem value="lname">Last Name</MenuItem>
+                  <MenuItem value="email">Email</MenuItem>
+                  <MenuItem value="feedback">Feedback</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField
+                onChange={handleFilter}
+                value={searchValue}
+                id="standard-basic"
+                label="Search"
+                variant="standard"
+              />
+            </Box>
             <Button
               variant="outlined"
               color="error"
               onClick={handleDelete}
-              sx={{ ml: 2 }}
+              sx={{ ml: 2, display: "flex", justifyContent: "flex-end" }}
               disabled={selectedRows.length === 0}
               startIcon={<DeleteIcon />}
             >

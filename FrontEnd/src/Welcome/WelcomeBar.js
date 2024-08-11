@@ -26,10 +26,13 @@ function WelcomeBar() {
     setAnchorElNav(null);
   };
 
+  // sx={{ background: "white", color: "#1976d2" }}
+
   return (
-    <AppBar position="fixed" sx={{ background: "white", color: "#1976d2" }}>
+    <AppBar position="fixed" sx={{ color: "white", background: "#1976d2" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* the button befor the logo  */}
           <Box
             sx={{
               flexGrow: 1,
@@ -45,40 +48,55 @@ function WelcomeBar() {
                   my: 2,
                   mx: 2,
                   display: "block",
-                  color: "#1976d2",
+                  color: "white",
                   fontWeight: 300,
                   fontSize: 15,
+                  "&:hover": {
+                    color: "black",
+                  },
                 }}
               >
                 {page}
               </Button>
             ))}
           </Box>
-          {/* the logo for small device  */}
-          <Link
-            to="/"
-            style={{
-              textDecoration: "none",
+          {/* the logo for big device  */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
             }}
           >
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <Typography
+                variant="h4"
+                noWrap
+                component="a"
+                sx={{
+                  display: { xs: "none", md: "flex" },
+                  fontFamily: "Roboto Slab",
+                  fontWeight: 700,
+                  letterSpacing: ".3rem",
+                  textDecoration: "none",
+                  color: "white",
+                }}
+              >
+                ADRD
+              </Typography>
+            </Link>
             <Typography
-              variant="h4"
-              noWrap
-              component="a"
               sx={{
-                mr: 2,
                 display: { xs: "none", md: "flex" },
-                justifyContent: "center",
-                fontFamily: "Roboto Slab",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                textDecoration: "none",
-                color: "#1976d2",
+                fontSize: "10px",
+                color: "white",
               }}
             >
-              ADRD
+              Arabic Decaptive Review Detection
             </Typography>
-          </Link>
+          </Box>
           {/* list icon for small device */}
           <Box
             sx={{
@@ -138,7 +156,7 @@ function WelcomeBar() {
                 fontWeight: 700,
                 letterSpacing: ".3rem",
                 textDecoration: "none",
-                color: "#1976d2",
+                color: "white",
               }}
             >
               ADRD
@@ -160,9 +178,12 @@ function WelcomeBar() {
                   my: 2,
                   mx: 2,
                   display: "block",
-                  color: "#1976d2",
+                  color: "white",
                   fontWeight: 300,
                   fontSize: 15,
+                  "&:hover": {
+                    color: "black",
+                  },
                 }}
               >
                 {page}
