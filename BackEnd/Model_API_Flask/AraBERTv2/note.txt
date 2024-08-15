@@ -1,0 +1,7 @@
+put fine-tuned BERTv2 and BERTv2 tokenizer folders here
+
+Fine-tuned BERTv2 link: https://drive.google.com/drive/folders/13LC6r6rWpWPWNV27AnoaV2Y7N84sM263
+
+BERTv2 tokenizer link : https://drive.google.com/drive/folders/1KCBXrwmniEAi8h3A1EudNo_LYljbZALv
+
+*i am using the m01 unbalanced 256*
