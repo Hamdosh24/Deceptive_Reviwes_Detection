@@ -4,10 +4,13 @@ const app = express();
 const morgan = require('morgan');
 const bodyPareser = require('body-parser');
 const mongoose = require('mongoose');
-const axios = require('axios');
+
+app.use(express.json());
+app.use(morgan('dev'));
 
 
-const predictionRoutes = require('./api/routes/Prediction');
+
+
 const userRoutes= require('./api/routes/users');
 const scraperRoutes = require('./api/routes/scrap'); 
 app.use('/scraper', scraperRoutes);
@@ -29,8 +32,8 @@ app.use((req, res, next) => {
     next();//حتى لا اعمل بلوك للركوست تبعي
 });
 
+
 // //Routes which should handle requests 
-app.use('/Prediction',predictionRoutes)
 app.use('/users', userRoutes);
 app.use('/scraper', scraperRoutes);
 
@@ -51,6 +54,5 @@ app.use((error, req, res, next) => {//handle all errors
     )
 })
 module.exports = app;
-
 
 
