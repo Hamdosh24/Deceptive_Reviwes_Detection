@@ -1,32 +1,121 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const axios = require('axios');
 
-const app = express();
+const ScrapResult = require('../models/ScrapResult'); // استيراد الموديل
 
-const scraperName = 'welcomesaudi'; 
-const url = 'https://welcomesaudi.com/hotel/hilton-riyadh-hotel-and-residences';
-const fileName = 'items3';
+// WelcomeSaudi Scraper
+// router.post('/welcomesaudi', async (req, res) => {
+//     try {
+//         const response = await axios.post('http://localhost:5000/scrap/welcomesaudi', {
+//             id: req.body.id,
+//             url: req.body.url
+//         });
 
-async function runScraper() {
+//         // فقط الاحتفاظ بالمراجعات التي تحتوي على text و rating
+//         const reviews = response.data.Reviews.map(review => ({
+//             text: review.Text,
+//             rating: review.Ratting
+//         }));
+
+//         const scrapResult = new ScrapResult({
+//             id: req.body.id,
+//             url: req.body.url,
+//             reviews: reviews
+//         });
+
+//         await scrapResult.save();
+
+//         res.status(200).json({
+//             id: scrapResult.id,
+//             url: scrapResult.url,
+//             reviews: scrapResult.reviews
+//         });
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
+
+
+// eBay Scraper
+router.post('/ebay', async (req, res) => {
     try {
-        const response = await axios.post(`http://0.0.0.0:3000/scrap/${scraperName}`, {
-            url,
-            file_name: fileName
+        const response = await axios.post('http://localhost:5000/scrap/ebay', {
+            id: req.body.id,
+            url: req.body.url
         });
 
-        console.log('Response from Flask API:', response.data);
-    } catch (error) {
-        if (error.response) {
-            console.error('Error calling Flask API:', error.response.data);
-        } else {
-            console.error('Error:', error.message);
-        }
-    }
-}
+        const scrapResult = new ScrapResult({
+            id: req.body.id,
+            url: req.body.url,
+            reviews: response.data.Reviews
+        });
 
-// runScraper();
+        await scrapResult.save();
+
+        res.status(200).json(scrapResult);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Amazon Scraper
+
+
+
+router.post('/welcomesaudi', async (req, res) => {
+    try {
+        const response = await axios.post('http://localhost:5000/scrap/welcomesaudi', {
+            id: req.body.id,
+            url: req.body.url
+        });
+
+        // تحقق من البيانات المستلمة
+        console.log('Response from scrap service:', response.data);
+
+        // استخراج المراجعات
+        const reviews = response.data.Reviews ? response.data.Reviews.map(review => ({
+            text: review.Text,
+            rating: review.Ratting
+        })) : []; // اجعلها مصفوفة فارغة إذا لم توجد مراجعات
+
+        // بعد الحفظ، إرسال المراجعات إلى خدمة `prediction`
+        const inputTexts = reviews.map(review => review.text);
+
+        console.log('Sending inputTexts to prediction:', inputTexts);
+
+        // إرسال طلب إلى خدمة prediction واستخدام then/catch للتعامل مع الرد
+        axios.post('http://0.0.0.0:3000/predict', { inputTexts })
+            .then(async predictionResponse => {
+                console.log('Response from external service:', predictionResponse.data);
+                // الربط بين المراجعات والنتائج المتوقعة
+                const reviewsWithLabels = reviews.map((review, index) => ({
+                    id: req.body.id,
+                    text: review.text,
+                    rating: review.rating,
+                    label: predictionResponse.data[index] // افترض أن النتائج في نفس الترتيب
+                }));
+
+                // حفظ النتائج في MongoDB
+                await ScrapResult.create(reviewsWithLabels);
+
+                // رد مع البيانات المخزنة
+                res.status(200).json({
+                    message: 'Data received and stored successfully',
+                    reviewsWithLabels
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                res.status(500).json({ error: 'Error processing the request' });
+            });
+
+    } catch (error) {
+        console.error('Error occurred:', error); // طباعة الخطأ
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 module.exports = router;
 
