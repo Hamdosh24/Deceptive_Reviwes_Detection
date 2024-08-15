@@ -1,18 +1,36 @@
 from transformers import AutoTokenizer, AutoModel
 from joblib import load
+from torch import nn, device, load, no_grad
+
 
 
 MAX_LEN = 256
+d = device('cpu')
 
 # loading models & tokenizer
 arabert_tokenizer = AutoTokenizer.from_pretrained("./AraBERTv2/tokenizers-bert-base-arabertv2")
-arabert_model = AutoModel.from_pretrained("./AraBERTv2/model-bert-base-arabertv2-finetuned", return_dict=True)
-lr_cls = load("./Trained_model/lr_cls.pkl")
 
+class BERTClass(nn.Module):
+    def __init__(self):
+        super(BERTClass, self).__init__()
+        self.bert_model = AutoModel.from_pretrained("./AraBERTv2/Fine_tuned-BERT-m01-256-Unbalanced", return_dict=True)
+        self.dropout = nn.Dropout(0.1)
+        self.linear = nn.Linear(768, 8)
+        self.soft = nn.Softmax(dim=1)
+
+    def forward(self, input_ids, attention_mask, token_type_ids):
+        output = self.bert_model(input_ids, attention_mask, token_type_ids)
+        output = self.dropout(output["pooler_output"])
+        output = self.linear(output)
+        output = self.soft(output)
+        return output
+
+model = BERTClass()
+model.load_state_dict(load('./Trained_model/new_model_m01_256_Unbalanced.pth', map_location=d, weights_only=True))
 
 # emmbding the input text
-def emmbding(text):
-  input = arabert_tokenizer.encode_plus(text,
+def tokenizer(text):
+  output = arabert_tokenizer.encode_plus(text,
                                   None,
                                   add_special_tokens=True,
                                   max_length=MAX_LEN,
@@ -21,22 +39,24 @@ def emmbding(text):
                                   return_attention_mask=True,
                                   return_tensors="pt"
                                   )
-
-  output = arabert_model(input_ids=input["input_ids"],
-                   attention_mask=input["attention_mask"],
-                   token_type_ids=input["token_type_ids"]
-                   ).pooler_output.detach().numpy()
-
   return output
 
-
 def get_prediction(text):
-    embd_text = emmbding(text)
-    pred_value = lr_cls.predict(embd_text).item()
+    tokenz = tokenizer(text)
+    model.eval()
+    with no_grad():
+        pred_tensor = model(input_ids=tokenz["input_ids"],
+                            attention_mask=tokenz["attention_mask"],
+                            token_type_ids=tokenz["token_type_ids"]
+                            )
+        pred_vec = pred_tensor.numpy()
+    return pred_vec
 
-    if pred_value == 1:
-        return 'deceptive'
-    elif pred_value == 0:
-        return 'truthful'
+def get_review_label(vec):
+    deceptive_sum = sum(vec[0][:4])
+    truthful_sum = sum(vec[0][4:])
+
+    if deceptive_sum > truthful_sum:
+        return 'Deceptive'
     else:
-        raise 'Error, Model wrong output'
+        return 'Truthful'

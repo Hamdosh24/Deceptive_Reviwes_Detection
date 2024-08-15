@@ -1,2 +1,0 @@
-put the model and the tokenizer folders here
-link to download : https://drive.google.com/drive/folders/1pyt2XIdwN-W7yDdSpfuF5RLr3u_KMC74?usp=sharing
