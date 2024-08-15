@@ -6,18 +6,22 @@ const bodyPareser = require('body-parser');
 const mongoose = require('mongoose');
 
 app.use(express.json());
-app.use(morgan('dev'));
 
 
 
-
+const predictionRoutes = require('./api/routes/Prediction');
 const userRoutes= require('./api/routes/users');
 const scraperRoutes = require('./api/routes/scrap'); 
+const feedbackRoutes = require('./api/routes/feedback'); // تأكد من المسار صحيح
+
 app.use('/scraper', scraperRoutes);
 
 const mongoURI = 'mongodb://localhost:27017/';  
 
 mongoose.connect(mongoURI);
+
+
+
 
 app.use(morgan('dev'));//حتى تصولني الشغلات يلي عم اعملا يكوست
 app.use(bodyPareser.urlencoded({ extended: false }))
@@ -34,8 +38,11 @@ app.use((req, res, next) => {
 
 
 // //Routes which should handle requests 
+app.use('/Prediction',predictionRoutes)
 app.use('/users', userRoutes);
 app.use('/scraper', scraperRoutes);
+app.use('/feedback', feedbackRoutes);
+
 
 
 app.use((req, res, next) => {
