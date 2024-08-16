@@ -61,7 +61,7 @@ const ContentDash = () => {
               }}
             >
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Time Usage the Decaptive model
+                Time Usage of Decaptive model
               </Typography>
               <LineChart
                 width={500}
@@ -102,7 +102,7 @@ const ContentDash = () => {
               }}
             >
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Time Usage the Fetch Data model
+                Time Usage of Fetch Data model
               </Typography>
               <LineChart
                 width={500}

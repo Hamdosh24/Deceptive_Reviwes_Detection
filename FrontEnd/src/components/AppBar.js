@@ -30,14 +30,6 @@ export default function ButtonAppBar() {
               </Button>
             </Link>
           </Box>
-          <Box>
-            <Link to="/sign-in">
-              <Button variant="text" sx={{ color: "white" }}>
-                <AccountCircleIcon sx={{ ml: "2px" }} />
-                Login
-              </Button>
-            </Link>
-          </Box>
         </Toolbar>
       </AppBar>
     </Box>
