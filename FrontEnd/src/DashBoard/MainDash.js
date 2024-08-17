@@ -152,7 +152,10 @@ export default function MainDash() {
         <Divider />
         <List>
           <ListItem disablePadding sx={{ display: "block" }}>
-            <Link to="/main" style={{ textDecoration: "none", color: "black" }}>
+            <Link
+              to="/decaptive-dash"
+              style={{ textDecoration: "none", color: "black" }}
+            >
               <ListItemButton
                 sx={{
                   color: "#757575",
@@ -186,7 +189,7 @@ export default function MainDash() {
           </ListItem>
           <ListItem disablePadding sx={{ display: "block" }}>
             <Link
-              to="/fetch"
+              to="/fetsh-dash"
               style={{ textDecoration: "none", color: "black" }}
             >
               <ListItemButton
@@ -330,10 +333,7 @@ export default function MainDash() {
           </ListItem>
           <Divider />
           <ListItem disablePadding sx={{ display: "block" }}>
-            <Link
-              to="/accdash"
-              style={{ textDecoration: "none", color: "black" }}
-            >
+            <Link to="/" style={{ textDecoration: "none", color: "black" }}>
               <ListItemButton
                 sx={{
                   color: "#757575",

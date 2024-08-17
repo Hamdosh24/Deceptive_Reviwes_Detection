@@ -12,8 +12,6 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const pages = ["Decaptive", "Fetch Data", "About", "Let's Start"];
-const pages1 = ["Decaptive", "Fetch Data"];
-const pages2 = ["About", "Let's Start"];
 
 function WelcomeBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -40,25 +38,40 @@ function WelcomeBar() {
               justifyContent: "center",
             }}
           >
-            {pages1.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  my: 2,
-                  mx: 2,
-                  display: "block",
-                  color: "white",
-                  fontWeight: 300,
-                  fontSize: 15,
-                  "&:hover": {
-                    color: "black",
-                  },
-                }}
-              >
-                {page}
-              </Button>
-            ))}
+            <Button
+              key="Decaptive"
+              onClick={handleCloseNavMenu}
+              sx={{
+                my: 2,
+                mx: 2,
+                display: "block",
+                color: "white",
+                fontWeight: 300,
+                fontSize: 15,
+                "&:hover": {
+                  color: "black",
+                },
+              }}
+            >
+              Decaptive
+            </Button>
+            <Button
+              key="Fetch Data"
+              onClick={handleCloseNavMenu}
+              sx={{
+                my: 2,
+                mx: 2,
+                display: "block",
+                color: "white",
+                fontWeight: 300,
+                fontSize: 15,
+                "&:hover": {
+                  color: "black",
+                },
+              }}
+            >
+              Fetch Data
+            </Button>
           </Box>
           {/* the logo for big device  */}
           <Box
@@ -132,11 +145,22 @@ function WelcomeBar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              {pages.map((page) =>
+                page === "Let's Start" ? (
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Link
+                      to="/sign-in"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <Typography textAlign="center">{page}</Typography>
+                    </Link>
+                  </MenuItem>
+                ) : (
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                )
+              )}
             </Menu>
           </Box>
           {/* the logo for small device */}
@@ -170,11 +194,29 @@ function WelcomeBar() {
               justifyContent: "center",
             }}
           >
-            {pages2.map((page) => (
+            <Button
+              key="About"
+              onClick={handleCloseNavMenu}
+              sx={{
+                my: 2,
+                mx: 2,
+                display: "block",
+                color: "white",
+                fontWeight: 300,
+                fontSize: 15,
+                "&:hover": {
+                  color: "black",
+                },
+              }}
+            >
+              About
+            </Button>
+            <Link to="/sign-in" style={{ textDecoration: "none" }}>
               <Button
-                key={page}
+                key="About"
                 onClick={handleCloseNavMenu}
                 sx={{
+                  textDecoration: "none",
                   my: 2,
                   mx: 2,
                   display: "block",
@@ -186,9 +228,9 @@ function WelcomeBar() {
                   },
                 }}
               >
-                {page}
+                Let's Start
               </Button>
-            ))}
+            </Link>
           </Box>
         </Toolbar>
       </Container>

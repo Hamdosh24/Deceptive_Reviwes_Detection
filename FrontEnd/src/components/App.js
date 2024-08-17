@@ -7,6 +7,8 @@ import AccountDash from "../DashBoard/AccountDash";
 import FeedDash from "../DashBoard/FeedDash";
 import MainLanding from "../Welcome/MainLanding.js";
 import HistoryDash from "../DashBoard/AccountHistoryDash";
+import DecaptiveDash from "../DashBoard/DecaptiveDash.js";
+import FetshDash from "../DashBoard/FetshDash.js";
 
 const SignIn = lazy(() => import("./LogIn"));
 const Decaptive = lazy(() => import("./Decaptive"));
@@ -23,6 +25,22 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<LoadingPage />}>
         <MainLanding />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/admin",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <ContentDash />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/user",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <LandingPage />
       </Suspense>
     ),
   },
@@ -119,6 +137,22 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<LoadingPage />}>
         <HistoryDash />
+      </Suspense>
+    ),
+  },
+  {
+    path: "decaptive-dash",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <DecaptiveDash />
+      </Suspense>
+    ),
+  },
+  {
+    path: "fetsh-dash",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <FetshDash />
       </Suspense>
     ),
   },

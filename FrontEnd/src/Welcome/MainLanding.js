@@ -3,7 +3,7 @@ import React from "react";
 import WelcomeBar from "./WelcomeBar";
 import image from "../images/banner.png";
 import image1 from "../images/landing.jpeg";
-import { Repeat } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 const MainLanding = () => {
   return (
@@ -50,18 +50,21 @@ const MainLanding = () => {
               reviews we encounter whether on social media platforms or
               e-commerce sites.
             </Typography>
-            <Button
-              variant="contained"
-              sx={{
-                mt: 10,
-                mb: 10,
-                fontSize: 15,
-                borderRadius: 25,
-                paddingX: 10,
-              }}
-            >
-              Try it
-            </Button>
+            <Link to="/sign-in" style={{ textDecoration: "none" }}>
+              <Button
+                variant="contained"
+                sx={{
+                  mt: 10,
+                  mb: 10,
+                  fontSize: 15,
+                  borderRadius: 25,
+                  paddingX: 10,
+                  textDecoration: "none",
+                }}
+              >
+                Try it
+              </Button>
+            </Link>
           </Box>
         </Container>
       </Box>
