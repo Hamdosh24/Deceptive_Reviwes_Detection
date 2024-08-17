@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from scrapers import welcomesaudi_scraper, ebay_scraper, amazon_scraper
+from scrapers import welcomesaudi_scraper, ebay_seller_scraper, ebay_proudect_scraper
 
 
 
@@ -20,29 +20,29 @@ def run_welcomesaudi_scraper():
         raise Exception('method should be POST')
 
 
-@app.route('/scrap/ebay', methods=['POST'])
-def run_ebay_scraper():
+@app.route('/scrap/ebay/seller', methods=['POST'])
+def run_ebay_seller_scraper():
     if request.method == 'POST':
         #
         req_dict = request.json
         id = req_dict['id']
         url = req_dict['url']
 
-        res = ebay_scraper(id, url)
+        res = ebay_seller_scraper(id, url)
         return jsonify(res)
     else:
         raise Exception('method should be POST')
 
 
-@app.route('/scrap/amazon', methods=['POST'])
-def run_amazon_scraper():
+@app.route('/scrap/ebay/proudect', methods=['POST'])
+def run_ebay_proudect_scraper():
     if request.method == 'POST':
         #
         req_dict = request.json
         id = req_dict['id']
         url = req_dict['url']
 
-        res = amazon_scraper(id, url)
+        res = ebay_proudect_scraper(id, url)
         return jsonify(res)
     else:
         raise Exception('method should be POST')

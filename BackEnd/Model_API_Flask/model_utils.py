@@ -1,11 +1,16 @@
 from transformers import AutoTokenizer, AutoModel
 from joblib import load
 from torch import nn, device, load, no_grad
+from camel_tools.sentiment import SentimentAnalyzer
+import re
 
 
 
 MAX_LEN = 256
 d = device('cpu')
+
+# loading SentimentAnalyzer
+sa = SentimentAnalyzer("CAMeL-Lab/bert-base-arabic-camelbert-da-sentiment")
 
 # loading models & tokenizer
 arabert_tokenizer = AutoTokenizer.from_pretrained("./AraBERTv2/tokenizers-bert-base-arabertv2")
@@ -49,8 +54,9 @@ def get_prediction(text):
                             attention_mask=tokenz["attention_mask"],
                             token_type_ids=tokenz["token_type_ids"]
                             )
-        pred_vec = pred_tensor.numpy()
+        pred_vec = pred_tensor.numpy().tolist()
     return pred_vec
+
 
 def get_review_label(vec):
     deceptive_sum = sum(vec[0][:4])
@@ -60,3 +66,16 @@ def get_review_label(vec):
         return 'Deceptive'
     else:
         return 'Truthful'
+
+
+def get_polarity(text):
+  predicted_class = sa.predict([text])
+  return predicted_class[0]
+
+
+def is_arabic(text):
+    match_pattern = re.findall('[ا-ي]', text)
+    if match_pattern:
+        return True
+    else:
+        return False
