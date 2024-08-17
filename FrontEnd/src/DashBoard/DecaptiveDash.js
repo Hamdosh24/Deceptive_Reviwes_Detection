@@ -9,11 +9,11 @@ import {
   CardMedia,
 } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ButtonAppBar from "./AppBar";
 import SendIcon from "@mui/icons-material/Send";
 import img from "../images/banner-right-image.png";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
+import MainDash from "./MainDash";
 
 const StyledTextField = styled(TextField)({
   "& .MuiOutLinedInput-root": {
@@ -39,7 +39,7 @@ const handleSend = async (text) => {
   }
 };
 
-const Decaptive = () => {
+const DecaptiveDash = () => {
   const [text, setText] = useState("");
 
   const handleChange = (event) => {
@@ -47,7 +47,7 @@ const Decaptive = () => {
   };
   return (
     <>
-      <ButtonAppBar />
+      <MainDash />
       <CardMedia
         sx={{ position: "absolute", left: 0, top: 0 }}
         component="img"
@@ -71,12 +71,12 @@ const Decaptive = () => {
             sx={{
               position: "relative",
               display: "flex",
-              flexDirection: "row",
+              flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Box sx={{ width: "50%" }}>
+            {/* <Box sx={{ width: "50%" }}>
               <Typography
                 sx={{
                   fontWeight: "bold",
@@ -98,18 +98,31 @@ const Decaptive = () => {
                 Here you can enter your text or link from Amazon, Welcomesudi,
                 Talabat to perform the detection process
               </Typography>
-            </Box>
+            </Box> */}
             <CardMedia
               component="img"
               image={img}
-              style={{ width: "50vh" }}
+              style={{ width: "40vh" }}
               alt="dcd"
             />
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                fontSize: 25,
+                color: "#1976d2",
+                "&:hover": {
+                  color: "#ff9e43",
+                },
+              }}
+            >
+              Decaptive
+            </Typography>
           </Box>
           <StyledTextField
             id="demo-helper-text-misaligned"
-            label="Text"
-            sx={{ width: "50%", mb: 20 }}
+            helperText="Enter text or url"
+            label="Text or Url"
+            sx={{ width: "50%", mb: 20, mt: 5 }}
             onChange={handleChange}
             InputProps={{
               endAdornment: (
@@ -138,7 +151,7 @@ const Decaptive = () => {
   );
 };
 
-export default Decaptive;
+export default DecaptiveDash;
 
 //  {/* the sentance is non fake */}
 //    <Box
