@@ -1,4 +1,4 @@
 put the trained moel here 
-Trained model link: https://drive.google.com/drive/folders/13LC6r6rWpWPWNV27AnoaV2Y7N84sM263
+Trained model link: https://drive.google.com/drive/folders/1bJC45PJ-aE-BV3wMCTkQSqFxT2TwHVR3?usp=sharing
 
 *i am using m01 unbalanced 256*

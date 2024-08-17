@@ -1,10 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
+from user_agent_list import random_user_agent
 
 
 
 def welcomesaudi_scraper(id, url):
-    sours = requests.get(url).text
+    sours = requests.get(url=url, headers={"user-agent": random_user_agent()}).text
     soup = BeautifulSoup(sours, 'lxml')
     res = {
         "id": id,
@@ -16,7 +17,7 @@ def welcomesaudi_scraper(id, url):
     next_page_button = True
     while next_page_button:
         next_page_url = base_url + f'?page={page_num}'
-        next_page = requests.get(next_page_url).text
+        next_page = requests.get(url=next_page_url, headers={"user-agent": random_user_agent()}).text
         soup = BeautifulSoup(next_page, 'lxml')
         reviews = soup.find_all('div', class_='review-item')
         # check if reviews section exsist
@@ -43,42 +44,93 @@ def welcomesaudi_scraper(id, url):
     return res
 
 
-def amazon_scraper(id, url):
-    pass
+def ebay_seller_scraper(id, url):
 
-
-def talabat_scraper(id, url):
-    pass
-
-
-def ebay_scraper(id, url):
-
-    sours = requests.get(url).text
+    sours = requests.get(url=url).text
     soup = BeautifulSoup(sours, 'lxml')
     res = {
         "id": id,
         "Reviews": []
     }
 
-    all_reviews_url = soup.find('div', class_='fdbk-detail-list__btn-container').a['href']
-    sours = requests.get(all_reviews_url).text
+    all_seller_reviews = soup.find('div', class_='fdbk-detail-list__btn-container')
+
+    # check if seller reviews exist
+    if all_seller_reviews:
+        all_seller_reviews = all_seller_reviews.a["href"]
+        sours = requests.get(url=all_seller_reviews).text
+        soup = BeautifulSoup(sours, 'lxml')
+        num_reviews = int(soup.find("div", class_="fdbk-result-status").text.split()[0].replace(",", ""))
+
+        i = 0
+        while i % 25 == 0:
+            reviews = soup.find_all('div', class_='fdbk-container__details__comment')
+            for review in reviews:
+                Text = review.span.text
+
+                res["Reviews"].append({
+                    'Text': Text,
+                    'Ratting': None
+                })
+                i += 1
+
+            next_button = soup.find("a", class_="pagination__next")
+            if next_button:
+                next_button_url = "https://www.ebay.com/fdbk/mweb_profile" + next_button["href"]
+                sours = requests.get(url=next_button_url).text
+                soup = BeautifulSoup(sours, 'lxml')
+
+            else:
+                break
+
+        return res
+    # seller reviews don't exist
+    else:
+        return {
+        "id": id,
+        "Reviews": ["Wrong link, The page must counten seller reviews"]
+    }
+
+
+def ebay_proudect_scraper(id, url):
+
+    sours = requests.get(url=url).text
     soup = BeautifulSoup(sours, 'lxml')
-    num_reviews = int(soup.find("div", class_="fdbk-result-status").text.split()[0])
+    res = {
+        "id": id,
+        "Reviews": []
+    }
 
-    i = 0
-    while i % 25 == 0:
-        reviews = soup.find_all('div', class_='fdbk-container__details__comment')
-        for review in reviews:
-            Text = review.span.text
-
-            res["Reviews"].append({
-                'Text': Text,
-                'Ratting': None
-            })
-            i += 1
-
-        next_button_url = "https://www.ebay.com/fdbk/mweb_profile" + soup.find("a", class_="pagination__next")["href"]
-        sours = requests.get(next_button_url).text
+    all_prodect_reviews = soup.find('div', class_='x-review-details__allreviews')
+    # check if proudect reviews exist
+    if all_prodect_reviews:
+        all_prodect_reviews = all_prodect_reviews.a["href"]
+        sours = requests.get(url=all_prodect_reviews).text
         soup = BeautifulSoup(sours, 'lxml')
 
-    return res
+        i = 0
+        while i % 10 == 0:
+            reviews = soup.find_all('div', class_='ebay-review-section')
+            if reviews:
+                for review in reviews:
+                    stars = len(review.find_all("i", class_="fullStar"))
+                    text = review.find("p", class_="review-item-content").text
+
+                    res["Reviews"].append({
+                        'Text': text,
+                        'Ratting': stars
+                    })
+                    i += 1
+
+            next_button_url = soup.find_all("a", class_="spf-link")[-1]["href"]
+            sours = requests.get(url=next_button_url).text
+            soup = BeautifulSoup(sours, 'lxml')
+
+        return res
+
+    # seller reviews don't exist
+    else:
+        return {
+        "id": id,
+        "Reviews": ["Wrong link, The page must counten seller reviews"]
+    }
