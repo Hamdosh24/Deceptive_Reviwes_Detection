@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-
 import Button from "@mui/material/Button";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { HomeOutlined } from "@mui/icons-material";
@@ -28,14 +27,6 @@ export default function ButtonAppBar() {
               <Button variant="text" sx={{ color: "white" }}>
                 <HomeOutlined sx={{ ml: "2px" }} />
                 Home
-              </Button>
-            </Link>
-          </Box>
-          <Box>
-            <Link to="/sign-in">
-              <Button variant="text" sx={{ color: "white" }}>
-                <AccountCircleIcon sx={{ ml: "2px" }} />
-                Login
               </Button>
             </Link>
           </Box>
