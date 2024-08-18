@@ -3,10 +3,10 @@ const router = express.Router();
 const Feedback = require('../models/Feedback'); // تأكد من مسار النموذج صحيح
 
 router.post('/', async (req, res) => {
-    const { userId, message, rating } = req.body;
+    const {  message, rating } = req.body;
 
     // التحقق من وجود القيم المطلوبة
-    if (!userId || !message || rating === undefined) {
+    if ( !message || rating === undefined) {
         return res.status(400).json({ message: 'يرجى ملء جميع الحقول المطلوبة' });
     }
 
