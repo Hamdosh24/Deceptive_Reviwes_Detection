@@ -105,13 +105,27 @@ router.put('/updateuser/:id', async (req, res) => {
 
     // استخراج id من params
     const userId = req.params.id;
-    const { firstName, lastName, password } = req.body;
+    const { firstName, lastName, oldPassword, newPassword } = req.body;
 
     try {
-        // إذا كانت كلمة المرور موجودة في الطلب، قم بتشفيرها
+        // البحث عن المستخدم في قاعدة البيانات
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // إذا كانت كلمة المرور الجديدة موجودة، تحقق من كلمة المرور القديمة أولاً
+        if (newPassword) {
+            const isMatch = await bcrypt.compare(oldPassword, user.password);
+            if (!isMatch) {
+                return res.status(400).json({ message: 'Old password is incorrect' });
+            }
+        }
+
+        // تشفير كلمة المرور الجديدة إذا تم تقديمها
         let hashedPassword;
-        if (password) {
-            hashedPassword = await bcrypt.hash(password, 10);
+        if (newPassword) {
+            hashedPassword = await bcrypt.hash(newPassword, 10);
         }
 
         // تحديث المستخدم في قاعدة البيانات
@@ -120,14 +134,10 @@ router.put('/updateuser/:id', async (req, res) => {
             {
                 firstName,
                 lastName,
-                ...(password && { password: hashedPassword })  // تحديث كلمة المرور إذا تم تقديمها فقط
+                ...(newPassword && { password: hashedPassword })  // تحديث كلمة المرور إذا تم تقديمها فقط
             },
             { new: true }  // لإعادة المستخدم المحدث في الاستجابة
         );
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
-        }
 
         return res.status(200).json({ message: 'User updated successfully', user: updatedUser });
     } catch (err) {
@@ -151,3 +161,10 @@ router.delete('/:userId', (req, res, next) => {
 
 
 module.exports = router;
+//
+// "firstName":"kareem",
+// "lastName":"kallash",
+// "email":"kar123@gmail.com",
+// "password":"123456"
+
+//
