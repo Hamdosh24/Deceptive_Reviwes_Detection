@@ -12,6 +12,8 @@ app.use(express.json());
 const predictionRoutes = require('./api/routes/Prediction');
 const userRoutes= require('./api/routes/users');
 const scraperRoutes = require('./api/routes/scrap'); 
+const scraperPredictRoutes = require('./api/routes/scrapPredict'); 
+
 const feedbackRoutes = require('./api/routes/feedback'); // تأكد من المسار صحيح
 
 app.use('/scraper', scraperRoutes);
@@ -24,6 +26,7 @@ mongoose.connect(mongoURI);
 
 
 app.use(morgan('dev'));//حتى تصولني الشغلات يلي عم اعملا يكوست
+
 app.use(bodyPareser.urlencoded({ extended: false }))
 app.use(bodyPareser.json());//تجعل قرائة داتا الجسون سهلة
 app.use((req, res, next) => {
@@ -38,9 +41,10 @@ app.use((req, res, next) => {
 
 
 // //Routes which should handle requests 
-app.use('/Prediction',predictionRoutes)
+app.use('/predict',predictionRoutes)
 app.use('/users', userRoutes);
-app.use('/scraper', scraperRoutes);
+app.use('/scrap', scraperRoutes);
+app.use('/scrapPredict',scraperPredictRoutes )
 app.use('/feedback', feedbackRoutes);
 
 
@@ -61,5 +65,6 @@ app.use((error, req, res, next) => {//handle all errors
     )
 })
 module.exports = app;
+
 
 
