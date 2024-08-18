@@ -1,20 +1,13 @@
+// models/ScrapResult.js
+
 const mongoose = require('mongoose');
 
-const feedbackSchema = new mongoose.Schema({
-    message: {
-        type: String,
-        required: true,
-    },
-    rating: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    }
+const scrapResultSchema = new mongoose.Schema({
+    id: { type: String, required: true },
+    url: { type: String, required: true },
+    createdAt: {type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Feedback', feedbackSchema);
+const ScrapResult = mongoose.model('ScrapResult', scrapResultSchema);
+
+module.exports = ScrapResult;
