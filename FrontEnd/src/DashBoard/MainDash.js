@@ -153,7 +153,7 @@ export default function MainDash() {
         <List>
           <ListItem disablePadding sx={{ display: "block" }}>
             <Link
-              to="/decaptive-dash"
+              to="/admin/decaptive-dash"s
               style={{ textDecoration: "none", color: "black" }}
             >
               <ListItemButton

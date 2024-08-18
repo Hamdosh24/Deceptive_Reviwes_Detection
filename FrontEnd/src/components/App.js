@@ -35,6 +35,16 @@ const router = createBrowserRouter([
         <ContentDash />
       </Suspense>
     ),
+    children: [
+      {
+        path: "decaptive-dash",
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <DecaptiveDash />
+          </Suspense>
+        ),
+      },
+    ],
   },
   {
     path: "/user",
