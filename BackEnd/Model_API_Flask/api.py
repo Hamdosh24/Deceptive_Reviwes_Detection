@@ -1,25 +1,38 @@
-
 from flask import Flask, request, jsonify
-from model_utils import get_prediction
-
+from model_utils import get_prediction, get_review_label, get_polarity, is_arabic
 
 app = Flask(__name__)
 
+
 @app.route('/predict', methods=['POST'])
 def prediction():
-    print("Received a request on /predict")  # طباعة رسالة عند تلقي الطلب
     if request.method == 'POST':
-        input_texts = request.json.get('inputTexts', [])
+        input_texts = request.json
         out_put = []
 
         for text in input_texts:
-            pred_label = get_prediction(text)  # الحصول على التصنيف
-            out_put.append({
-                "text": text,  # النص المدخل
-                "label": pred_label  # التصنيف
-            })
-        print(f"Output: {out_put}")  # طباعة الناتج
+            if is_arabic(text['text']):
+                pred_vec = get_prediction(text['text'])
+                label = get_review_label(pred_vec)
+                polarity = get_polarity(text['text'])
+
+                out_put.append({
+                    "id": text["id"],
+                    "label": label,
+                    "pred_vec": pred_vec,
+                    "polarity": polarity
+                })
+            else:
+                out_put.append({
+                    "id": text["id"],
+                    "label": "Unsupported language, Most be Arabic",
+                    "pred_vec": "Unsupported language, Most be Arabic",
+                    "polarity": "Unsupported language, Most be Arabic"
+                })
         return jsonify(out_put)
+    else:
+        raise TypeError(f'The request type must by POST, get "{request.method}"')
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000, debug=True)
+    app.run(debug=True)
