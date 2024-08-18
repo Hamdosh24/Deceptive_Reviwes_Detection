@@ -137,18 +137,23 @@ export default function Sidebar() {
         </Link>
         <Divider />
         {/* ////////////////////////////////////////////////////////////////////////// */}
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <LogoutIcon
-                sx={{
-                  color: "#1976d2",
-                }}
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <LogoutIcon
+                  sx={{
+                    color: "#1976d2",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText
+                primary="Log Out"
+                sx={{ color: "black", textDecoration: "none" }}
               />
-            </ListItemIcon>
-            <ListItemText primary="Log Out" />
-          </ListItemButton>
-        </ListItem>
+            </ListItemButton>
+          </ListItem>
+        </Link>
       </List>
     </Box>
   );
