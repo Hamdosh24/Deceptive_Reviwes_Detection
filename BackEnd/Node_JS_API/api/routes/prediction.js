@@ -3,15 +3,20 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const axios = require('axios');
 
-const Prediction = require('../models/Prediction'); // قم بتعديل المسار حسب الحاجة
+const Prediction = require('../models/Prediction');
+const { logUsage } = require('../services/logService'); // تأكد من مسار الملف الصحيح
+const checkAuth = require('../middleware/authMiddleware');
 
-router.post('/', async (req, res) => {
+
+router.post('/',checkAuth, async (req, res) => {
     const inputTexts = req.body.inputTexts;
 
     // تحقق من أن inputTexts موجودة
     if (!inputTexts || !Array.isArray(inputTexts)) {
         return res.status(400).json({ error: 'Data is required' });
     }
+   
+
 
     // تحويل كل نص في inputTexts إلى كائن يحتوي على مفتاح 'text'
     const formattedInputTexts = inputTexts.map(text => ({ text }));
@@ -32,13 +37,23 @@ router.post('/', async (req, res) => {
         await newPrediction.save(); // حفظ السجل في MongoDB
 
         // إعداد البيانات لإرسالها في الاستجابة
-        const reviewsWithDetails = response.data.map((item, index) => ({
-            text: item.text,
-            label: item.label,
-            pred_vec: item.pred_vec,
-            polarity: item.polarity
-        }));
+        const reviewsWithDetails = response.data.map((item, index) => {
+            // تحقق من وجود text و label في item
+            const text = item.text || 'No text';  // إذا كان item.text غير موجود، سيتم استخدام 'No text'
+            const label = item.label || 'No label'; // إذا كان item.label غير موجود، سيتم استخدام 'No label'
+        
+            logUsage( 'predictionService', text, label); 
 
+            return {
+                text: text,
+                label: label,
+                pred_vec: item.pred_vec || 'No pred_vec',
+                polarity: item.polarity || 'No polarity' 
+            };
+        });
+        
+        
+        
         // إرسال البيانات المستلمة من Flask كاستجابة للعميل
         res.status(200).json({
             message: 'Data received and stored successfully',
@@ -54,7 +69,7 @@ router.post('/', async (req, res) => {
 module.exports = router;
 
 
-//http://0.0.0.0:3000/predict
+
 
 // {
 //     "inputTexts": [
@@ -64,7 +79,7 @@ module.exports = router;
 //     ]
 // }
 
-//
+
 
 
 

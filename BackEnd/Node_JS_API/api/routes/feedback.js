@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Feedback = require('../models/Feedback'); // تأكد من مسار النموذج صحيح
 
-router.post('/', async (req, res) => {
+const checkAuth = require('../middleware/authMiddleware');
+
+router.post('/',checkAuth, async (req, res) => {
     const {  message, rating } = req.body;
 
     // التحقق من وجود القيم المطلوبة
