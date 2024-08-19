@@ -2,11 +2,15 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const ScrapPredict = require('../models/ScrapPredict'); // استيراد الموديل
+const { logUsage } = require('../services/logService'); // تأكد من مسار الملف الصحيح
+const checkAuth = require('../middleware/authMiddleware');
 
 
 async function processScrapingAndPrediction(scrapUrl, req, res) {
     try {
         const { id, url } = req.body;
+
+        await logUsage(id, 'scrap And Predict Service', { url });
 
         // تخزين id والرابط في MongoDB
         await ScrapPredict.create({ id, url });
@@ -69,17 +73,17 @@ axios.post('http://0.0.0.0:3000/predict', { inputTexts })
 
 
 // Route for welcomesaudi
-router.post('/welcomesaudi', async (req, res) => {
+router.post('/welcomesaudi',checkAuth, async (req, res) => {
     await processScrapingAndPrediction('http://localhost:5000/scrap/welcomesaudi', req, res);
 });
 
 // Route for ebay/seller
-router.post('/ebay/seller', async (req, res) => {
+router.post('/ebay/seller',checkAuth, async (req, res) => {
     await processScrapingAndPrediction('http://localhost:5000/scrap/ebay/seller', req, res);
 });
 
 // Route for ebay/proudect
-router.post('/ebay/proudect', async (req, res) => {
+router.post('/ebay/proudect',checkAuth, async (req, res) => {
     await processScrapingAndPrediction('http://localhost:5000/scrap/ebay/proudect', req, res);
 });
 
