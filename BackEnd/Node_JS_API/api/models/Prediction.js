@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const predictionSchema = new mongoose.Schema({
+    
     inputTexts: {
         type: [String], // مصفوفة من النصوص
         required: true
