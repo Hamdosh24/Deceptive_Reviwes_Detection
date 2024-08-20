@@ -11,6 +11,8 @@ module.exports = (req, res, next) => {
 
         const decoded = jwt.verify(token, process.env.JWT_KEY);
         req.userData = decoded;
+        console.log('Decoded token data:', req.userData); // تحقق من محتويات التوكن
+
         next(); // متابعة إلى الميدل وير التالي
     } catch (error) {
         return res.status(401).json({
