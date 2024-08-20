@@ -9,11 +9,12 @@ app.use(express.json());
 
 
 
-const predictionRoutes = require('./api/routes/Prediction');
+const predictionRoutes = require('./api/routes/prediction');
 const userRoutes= require('./api/routes/users');
 const scraperRoutes = require('./api/routes/scrap'); 
 const scraperPredictRoutes = require('./api/routes/scrapPredict'); 
-
+const usageLogRoute = require('./api/routes/usageLog');
+const adminusageLogRoute = require('./api/routes/adminusageLog');
 const feedbackRoutes = require('./api/routes/feedback'); // تأكد من المسار صحيح
 
 app.use('/scraper', scraperRoutes);
@@ -46,6 +47,9 @@ app.use('/users', userRoutes);
 app.use('/scrap', scraperRoutes);
 app.use('/scrapPredict',scraperPredictRoutes )
 app.use('/feedback', feedbackRoutes);
+app.use('/usageLog', usageLogRoute);
+app.use('/adminusageLog', adminusageLogRoute);
+
 
 
 
@@ -65,6 +69,7 @@ app.use((error, req, res, next) => {//handle all errors
     )
 })
 module.exports = app;
+
 
 
 
