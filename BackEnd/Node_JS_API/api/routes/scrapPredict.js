@@ -3,14 +3,18 @@ const router = express.Router();
 const axios = require('axios');
 const ScrapPredict = require('../models/ScrapPredict'); // استيراد الموديل
 const { logUsage } = require('../services/logService'); // تأكد من مسار الملف الصحيح
+const { AdminlogUsage } = require('../services/AdminlogService'); // تأكد من مسار الملف الصحيح
 const checkAuth = require('../middleware/authMiddleware');
 
 
 async function processScrapingAndPrediction(scrapUrl, req, res) {
     try {
-        const { id, url } = req.body;
+        const userId = req.userData.id || req.userData.userId;  // تأكد من وجود userId في التوكن
+        const time= Date.now
 
-        await logUsage(id, 'scrap And Predict Service', { url });
+        await logUsage(userId, 'scrap And Predict Service', { url },time);
+        await AdminlogUsage(userId, 'scrap And Predict Service', { url },time);
+
 
         // تخزين id والرابط في MongoDB
         await ScrapPredict.create({ id, url });

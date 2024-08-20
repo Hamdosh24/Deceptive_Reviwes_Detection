@@ -122,7 +122,6 @@ router.post('/login', (req, res, next) => {
                 }
                 if (result) {
                     const token = jwt.sign({
-                        email: user[0].email,
                         userId: user[0]._id,
                         role: user[0].role // تضمين الدور في التوكن
                     }, process.env.JWT_KEY,
@@ -216,6 +215,22 @@ router.delete('/:userId',checkAuth, (req, res, next) => {
             console.error(err);
             res.status(500).json({ error: 'Failed to delete user' });
         });
+});
+
+
+router.get('/allusers', checkAuth, async (req, res) => {
+    try {
+        // تحقق مما إذا كان المستخدم هو Admin
+    
+        // جلب جميع المستخدمين مع الحقول المحددة
+        const users = await User.find({}, 'firstName lastName email'); // تحديد الحقول التي تريد إرجاعها
+
+        // إرسال قائمة المستخدمين كاستجابة
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ message: 'Failed to fetch users', error });
+    }
 });
 
 
