@@ -1,19 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const Feedback = require('../models/Feedback'); // تأكد من مسار النموذج صحيح
 
 const checkAuth = require('../middleware/authMiddleware');
+const checkAdmin = require('../middleware/check-admin');
 
-router.post('/',checkAuth, async (req, res) => {
-    const {  message, rating } = req.body;
+const Feedback = require('../models/Feedback');
 
-    // التحقق من وجود القيم المطلوبة
-    if ( !message || rating === undefined) {
+
+router.post('/Send', checkAuth, async (req, res) => {
+    const { message, rating } = req.body;
+
+    if (!message || rating === undefined) {
         return res.status(400).json({ message: 'يرجى ملء جميع الحقول المطلوبة' });
     }
 
-    // إنشاء feedback جديد
+    const userId = req.userData.id || req.userData.userId;
+
+  
     const feedback = new Feedback({
+        userId, 
         message,
         rating,
     });
@@ -23,6 +28,20 @@ router.post('/',checkAuth, async (req, res) => {
         res.status(201).json(savedFeedback);
     } catch (error) {
         res.status(500).json({ message: 'حدث خطأ أثناء حفظ التعليق', error });
+    }
+});
+
+
+router.get('/feedbacks', checkAuth,checkAdmin, async (req, res) => {
+    try {
+        const feedbacks = await Feedback.find()
+            .populate('userId', 'firstName lastName email') 
+            .exec();
+
+        res.status(200).json(feedbacks);
+    } catch (error) {
+        console.error('Error fetching feedbacks:', error);
+        res.status(500).json({ message: 'Failed to fetch feedbacks' });
     }
 });
 
