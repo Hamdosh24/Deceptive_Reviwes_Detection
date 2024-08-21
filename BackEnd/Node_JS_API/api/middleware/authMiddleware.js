@@ -11,7 +11,9 @@ module.exports = (req, res, next) => {
 
         const decoded = jwt.verify(token, process.env.JWT_KEY);
         req.userData = decoded;
-        next(); // متابعة إلى الميدل وير التالي
+        console.log('Decoded token data:', req.userData);
+
+        next(); 
     } catch (error) {
         return res.status(401).json({
             message: 'Invalid token'
