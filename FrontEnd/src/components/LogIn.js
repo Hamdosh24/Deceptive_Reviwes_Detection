@@ -41,10 +41,6 @@ export default function SignIn() {
   const [keyError, setKeyError] = useState(false);
   const linkTo = Person === "Admin" ? "/admin" : "/user";
 
-  const handleSignIn = () => {
-    alert("Sign In Successfully");
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     let valid = true;
@@ -215,13 +211,16 @@ export default function SignIn() {
                 }}
               />
             )}
-            <Link to={linkTo} style={{ textDecoration: "none" }}>
+            <Link
+              to={linkTo}
+              // onClick={alert("Sign Up Successfully")}
+              style={{ textDecoration: "none" }}
+            >
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={handleSignIn}
               >
                 Sign In
               </Button>

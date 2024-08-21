@@ -1,12 +1,12 @@
+// models/ScrapResult.js
+
 const mongoose = require('mongoose');
 
 const scrapResultSchema = new mongoose.Schema({
     id: { type: String, required: true },
-    text: { type: String, required: true },
-    rating: { type: Number, required: true },
-    label: { type: String, required: true } // يجب أن يكون النص
+    url: { type: String, required: true },
+    createdAt: {type: Date, default: Date.now }
 });
-
 
 const ScrapResult = mongoose.model('ScrapResult', scrapResultSchema);
 
