@@ -70,6 +70,3 @@ app.use((error, req, res, next) => {//handle all errors
 })
 module.exports = app;
 
-
-
-
