@@ -39,7 +39,7 @@ export default function SignUp() {
 
   const [Person, setPerson] = useState("Admin");
 
-  const linkTo = Person === "admin" ? "/admin" : "/user";
+  const linkTo = Person === "Admin" ? "/Admin" : "/user";
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -220,13 +220,16 @@ export default function SignUp() {
                 )}
               </Grid>
             </Grid>
-            <Link to={linkTo} style={{ textDecoration: "none" }}>
+            <Link
+              to={linkTo}
+              // onClick={alert("Sign Up Successfully")}
+              style={{ textDecoration: "none" }}
+            >
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={alert("Sign Up Successfully")}
               >
                 Sign Up
               </Button>
