@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
 
 const predictionSchema = new mongoose.Schema({
+    
     inputTexts: {
-        type: [String], // مصفوفة من النصوص
+        type: [String], 
         required: true
     },
     labels: {
-        type: [String], // مصفوفة من التصنيفات
+        type: [String], 
         required: true
     },
     createdAt: {
         type: Date,
-        default: Date.now // لتخزين تاريخ الإنشاء
+        default: Date.now 
     }
 });
 

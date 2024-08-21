@@ -1,4 +1,4 @@
-// models/ScrapResult.js
+
 
 const mongoose = require('mongoose');
 

@@ -1,17 +1,16 @@
 const mongoose = require('mongoose');
 
-const usageLogSchema = new mongoose.Schema({
+const AdminusageLogSchema = new mongoose.Schema({
   userId: { type: String, required: true },
   serviceUsed: { type: String, required: true },
   url: { type: String },
-  text: { type: String  }, 
+  text: { type: String  },  
   label: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 
-const UsageLog = mongoose.model('UsageLog', usageLogSchema);
+const AdminUsageLog = mongoose.model('AdminUsageLog', AdminusageLogSchema);
 
-module.exports = UsageLog;
-
+module.exports = AdminUsageLog;
 
 
