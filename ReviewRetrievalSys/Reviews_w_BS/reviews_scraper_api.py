@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from scrapers import welcomesaudi_scraper, ebay_seller_scraper, ebay_proudect_scraper
+from scrapers import welcomesaudi_scraper, ebay_seller_scraper, ebay_proudect_scraper, talabat_scraper
 
 
 
@@ -48,7 +48,20 @@ def run_ebay_proudect_scraper():
         raise Exception('method should be POST')
 
 
+@app.route('/scrap/talabat', methods=['POST'])
+def run_talabat_scraper():
+    if request.method == 'POST':
+        #
+        req_dict = request.json
+        id = req_dict['id']
+        url = req_dict['url']
+
+        res = talabat_scraper(id, url)
+        return jsonify(res)
+    else:
+        raise Exception('method should be POST')
+
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port="8000")
