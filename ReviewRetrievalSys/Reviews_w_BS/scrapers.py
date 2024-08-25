@@ -1,7 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
 from user_agent_list import random_user_agent
-
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+import time
 
 
 def welcomesaudi_scraper(id, url):
@@ -34,7 +38,7 @@ def welcomesaudi_scraper(id, url):
             pagination_list = soup.find_all('a', class_='page-link')
             # check if there are next page
             try:
-                next_page_button = pagination_list[len(pagination_list)-1]['rel']
+                next_page_button = pagination_list[len(pagination_list) - 1]['rel']
                 page_num += 1
             except:
                 next_page_button = False
@@ -45,7 +49,6 @@ def welcomesaudi_scraper(id, url):
 
 
 def ebay_seller_scraper(id, url):
-
     sours = requests.get(url=url).text
     soup = BeautifulSoup(sours, 'lxml')
     res = {
@@ -87,13 +90,12 @@ def ebay_seller_scraper(id, url):
     # seller reviews don't exist
     else:
         return {
-        "id": id,
-        "Reviews": ["Wrong link, The page must counten seller reviews"]
-    }
+            "id": id,
+            "Reviews": ["Wrong link, The page must counten seller reviews"]
+        }
 
 
 def ebay_proudect_scraper(id, url):
-
     sours = requests.get(url=url).text
     soup = BeautifulSoup(sours, 'lxml')
     res = {
@@ -131,6 +133,56 @@ def ebay_proudect_scraper(id, url):
     # seller reviews don't exist
     else:
         return {
+            "id": id,
+            "Reviews": ["Wrong link, The page must counten seller reviews"]
+        }
+
+
+def talabat_scraper(id, url):
+    res = {
         "id": id,
-        "Reviews": ["Wrong link, The page must counten seller reviews"]
+        "Reviews": []
     }
+
+    ratting_map = {
+        "سيء": 1,
+        "عادي": 2,
+        "جيد": 3,
+        "جيد جداً": 4,
+        "رهيب": 5
+    }
+
+    GD_PATH = r'C:\Program Files (x86)\chromedriver.exe'
+    service = Service(GD_PATH)
+
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver.get(url)
+
+    max_try = 10
+    for _ in range(max_try):
+        try:
+            more_button = driver.find_element(By.CSS_SELECTOR, "span.color-primary")
+            more_button.click()
+            time.sleep(1)
+        except:
+            print("Reached Final Page")
+            break
+
+    src = driver.page_source
+    soup = BeautifulSoup(src, "lxml")
+    reviews = soup.find_all("div", class_="card")
+    for review in reviews:
+        text = review.find("p").text
+        ratting = ratting_map[review.find("div", class_="ml-1").text]
+
+        res["Reviews"].append({
+            'Text': text,
+            'Ratting': ratting
+        })
+
+    driver.quit()
+
+    return res
