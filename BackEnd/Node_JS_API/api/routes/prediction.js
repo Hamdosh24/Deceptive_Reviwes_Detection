@@ -21,27 +21,34 @@ router.post('/', checkAuth, async (req, res) => {
         return res.status(400).json({ error: 'Data is required' });
     }
 
-    const formattedInputTexts = inputTexts.map(text => ({ text }));
+    // تحويل النصوص إلى الشكل المناسب إذا لزم الأمر
+const formattedInputTexts = inputTexts.map(text => text.text || text);
 
     try {
-        const response = await axios.post('http://0.0.0.0:3000/predict', { inputTexts: formattedInputTexts });
+        const response = await axios.post('http://0.0.0.0:3000/predict_text', { inputTexts: formattedInputTexts });
+
+        // تسجيل الاستجابة للتحقق من نوع البيانات
+        console.log('Response data:', response.data);
+
+        // التأكد من أن response.data هو مصفوفة
+        if (!Array.isArray(response.data.reviews_info)) {
+            throw new Error('Expected response.data.reviews_info to be an array');
+        }
 
         const newPrediction = new Prediction({
-            userId: userId,  
+            userId: userId,
             inputTexts: inputTexts,
-            labels: response.data.map(item => item.label)
+            labels: response.data.reviews_info.map(item => item.label)
         });
 
         await newPrediction.save();
 
-        const reviewsWithDetails = response.data.map((item, index) => {
+        const reviewsWithDetails = response.data.reviews_info.map((item, index) => {
             const text = item.text || 'No text';
             const label = item.label || 'No label';
             const time = Date.now();
-            logUsage(userId,'predictionService', {text, label }, time); 
-            AdminlogUsage(userId, 'predictionService', {text, label },time);
-
-
+            logUsage(userId, 'predictionService', { text, label }, time);
+            AdminlogUsage(userId, 'predictionService', { text, label }, time);
 
             return {
                 text: text,
@@ -61,7 +68,6 @@ router.post('/', checkAuth, async (req, res) => {
     }
 });
 
-
 module.exports = router;
 
 
@@ -74,6 +80,19 @@ module.exports = router;
 //         "النص الثالث"
 //     ]
 // }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
