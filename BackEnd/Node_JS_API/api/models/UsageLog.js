@@ -13,5 +13,3 @@ const UsageLog = mongoose.model('UsageLog', usageLogSchema);
 
 module.exports = UsageLog;
 
-
-
