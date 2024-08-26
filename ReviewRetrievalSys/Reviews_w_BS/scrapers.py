@@ -161,7 +161,7 @@ def talabat_scraper(id, url):
     driver = webdriver.Chrome(service=service, options=chrome_options)
     driver.get(url)
 
-    max_try = 10
+    max_try = 40
     for _ in range(max_try):
         try:
             more_button = driver.find_element(By.CSS_SELECTOR, "span.color-primary")
