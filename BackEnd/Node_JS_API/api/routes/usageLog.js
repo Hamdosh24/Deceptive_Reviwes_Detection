@@ -4,7 +4,7 @@ const UsageLog = require('../models/UsageLog');
 const checkAuth = require('../middleware/authMiddleware');
 
 
-// Route لجلب سجلات الاستخدام
+
 router.get('/', checkAuth, async (req, res) => {
   try {
       // الحصول على معرف المستخدم من التوكن
@@ -20,5 +20,6 @@ router.get('/', checkAuth, async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch user logs' });
   }
 });
+
 
 module.exports = router;
