@@ -3,17 +3,17 @@ import {
   Box,
   Container,
   TextField,
-  Alert,
   styled,
   Typography,
   CardMedia,
 } from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ButtonAppBar from "./AppBar";
 import SendIcon from "@mui/icons-material/Send";
+import ButtonAppBar from "./AppBar";
 import img from "../images/banner-right-image.png";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
+import { useDispatch, useSelector } from "react-redux";
+import { sendTextOrUrl } from "../Store/DataSlice";
 
 const StyledTextField = styled(TextField)({
   "& .MuiOutLinedInput-root": {
@@ -23,28 +23,19 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const isUrl = (string) => {
-  const pattern = new RegExp(
-    "^(https?:\\/\\/)?(www\\.)?([a-z0-9]+[.])+[a-z]{2,3}(\\/\\S*)?$",
-    "i"
-  );
-  return pattern.test(string);
-};
-
-const handleSend = async (text) => {
-  if (isUrl(text)) {
-    console.log(" _2_ Sending your request to API(URL):", text);
-  } else {
-    console.log("_1_ Sending your request to API (text):", text);
-  }
-};
-
 const Decaptive = () => {
   const [text, setText] = useState("");
+  const dispatch = useDispatch();
+  const { loading, result, error } = useSelector((state) => state.data);
 
   const handleChange = (event) => {
     setText(event.target.value);
   };
+
+  const handleSend = () => {
+    dispatch(sendTextOrUrl({ input: text }));
+  };
+
   return (
     <>
       <ButtonAppBar />
@@ -53,7 +44,7 @@ const Decaptive = () => {
         component="img"
         image={img1}
         style={{ width: "50vh" }}
-        alt="dcd"
+        alt="Top Banner"
       />
       <Container>
         <Box
@@ -103,14 +94,15 @@ const Decaptive = () => {
               component="img"
               image={img}
               style={{ width: "50vh" }}
-              alt="dcd"
+              alt="Side Banner"
             />
           </Box>
           <StyledTextField
             id="demo-helper-text-misaligned"
-            label="Text"
-            sx={{ width: "50%", mb: 20 }}
+            label="Text or URL"
+            sx={{ width: "50%", mb: "20px" }}
             onChange={handleChange}
+            value={text}
             InputProps={{
               endAdornment: (
                 <SendIcon
@@ -120,11 +112,20 @@ const Decaptive = () => {
                       cursor: "pointer",
                     },
                   }}
-                  onClick={() => handleSend(text)}
+                  onClick={handleSend}
                 />
               ),
             }}
           />
+          {loading && <Typography sx={{ mt: 2 }}>Sending...</Typography>}
+          {result && (
+            <Typography sx={{ mt: 2, color: "green" }}>
+              Data fetched successfully: {JSON.stringify(result)}
+            </Typography>
+          )}
+          {error && (
+            <Typography sx={{ mt: 2, color: "red" }}>Error: {error}</Typography>
+          )}
         </Box>
       </Container>
       <CardMedia
@@ -132,56 +133,10 @@ const Decaptive = () => {
         component="img"
         image={img3}
         style={{ width: "35vh" }}
-        alt="dcd"
+        alt="Bottom Banner"
       />
     </>
   );
 };
 
 export default Decaptive;
-
-//  {/* the sentance is non fake */}
-//    <Box
-//    sx={{
-//      display: "flex",
-//      justifyContent: "center",
-//      alignItems: "center",
-//      width: "50%",
-//      mt: "10px",
-//    }}
-//  >
-//    <Alert
-//      sx={{ textAlign: "right" }}
-//      iconMapping={{
-//        success: <CheckCircleOutlineIcon fontSize="inherit" />,
-//      }}
-//    >
-//      The sun is very nice bbjvdskdn nvkdnsvdskv nnsdjvsjdv n ndnsovids
-//      njdsvbsjvbbjs cdbsjbvi vsbvidvi hcds vsvsvsdvv
-//    </Alert>
-//  </Box>
-//  {/* the sentance is Fake  */}
-// {/* <Box
-//             sx={{
-//               display: "flex",
-//               justifyContent: "center",
-//               alignItems: "center",
-//               width: "50%",
-//               mt: "10px",
-//             }}
-//           >
-//             <Alert
-//               // variant="outlined"
-//               severity="error"
-//               sx={{
-//                 textAlign: "right",
-//                 borderTopRightRadius: "4px",
-//                 borderBottomRightRadius: "4px",
-//                 borderTopLeftRadius: 0,
-//                 borderBottomLeftRadius: 0,
-//               }}
-//             >
-//               The sun is very nice bbjvdskdn nvkdnsvdskv nnsdjvsjdv n ndnsovids
-//               njdsvbsjvbbjs cdbsjbvi vsbvidvi hcds vsvsvsdvv
-//             </Alert>
-//           </Box> */}

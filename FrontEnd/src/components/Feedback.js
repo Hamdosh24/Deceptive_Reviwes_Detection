@@ -10,14 +10,17 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
+import { useDispatch, useSelector } from "react-redux";
+import { sendFeedback } from "../Store/SendFeed";
 
 const Feedback = () => {
   const [feedback, setFeedback] = useState("");
-  const [feedbackList, setFeedbackList] = useState([]);
+  const dispatch = useDispatch();
+  const feedbackState = useSelector((state) => state.feedback);
 
   const handleAddFeedback = () => {
     if (feedback.trim()) {
-      setFeedbackList([...feedbackList, feedback]);
+      dispatch(sendFeedback({ feedback }));
       setFeedback("");
     }
   };
@@ -43,9 +46,17 @@ const Feedback = () => {
         <Button variant="contained" onClick={handleAddFeedback} sx={{ mb: 2 }}>
           Submit
         </Button>
+
+        {/* عرض حالة التحميل أو الخطأ */}
+        {feedbackState.loading && <Typography>Sending feedback...</Typography>}
+        {feedbackState.error && (
+          <Typography color="error">Error: {feedbackState.error}</Typography>
+        )}
+
+        {/* عرض قائمة الملاحظات */}
         <List sx={{ width: "100%", mt: 4, bgcolor: "background.paper" }}>
-          {feedbackList.map((item, index) => (
-            <React.Fragment key={index}>
+          {feedbackState.result && (
+            <React.Fragment>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                   <Avatar alt="User" />
@@ -59,14 +70,14 @@ const Feedback = () => {
                       variant="body2"
                       color="text.primary"
                     >
-                      {item}
+                      {feedbackState.result.feedback}
                     </Typography>
                   }
                 />
               </ListItem>
               <Divider variant="inset" component="li" />
             </React.Fragment>
-          ))}
+          )}
         </List>
       </Container>
       <CardMedia

@@ -4,21 +4,16 @@ import {
   Container,
   TextField,
   styled,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
   Typography,
-  Divider,
-  List,
   CardMedia,
 } from "@mui/material";
-import ButtonAppBar from "./AppBar";
 import SendIcon from "@mui/icons-material/Send";
+import { useDispatch, useSelector } from "react-redux";
+import ButtonAppBar from "./AppBar";
 import img from "../images/banner-right-image.png";
-
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
+import { sendData } from "../Store/DataSlice";
 
 const StyledTextField = styled(TextField)({
   "& .MuiOutLinedInput-root": {
@@ -28,37 +23,38 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const isUrl = (string) => {  
-  const pattern = new RegExp(  
-    "^(https?:\\/\\/)?(www\\.)?([a-z0-9]+[.])+[a-z]{2,3}(\\/\\S*)?$",  
-    "i"  
-  );  
-  return pattern.test(string);  
-}; 
-
-const handleSend = async (text) => {  
-  if (isUrl(text)) {  
-    console.log("Sending request to API with URL:", text);  
-  }
-}; 
+const isUrl = (string) => {
+  const pattern = new RegExp(
+    "^(https?:\\/\\/)?(www\\.)?([a-z0-9]+[.])+[a-z]{2,3}(\\/\\S*)?$",
+    "i"
+  );
+  return pattern.test(string);
+};
 
 const Fetch = () => {
-  const [text, setText] = useState("");  
-  const [error, setError] = useState("");  
+  const [text, setText] = useState("");
+  const [error, setError] = useState("");
 
-  const handleChange = (event) => {  
-    setText(event.target.value);  
+  const dispatch = useDispatch();
+  const {
+    loading,
+    result,
+    error: apiError,
+  } = useSelector((state) => state.data);
+
+  const handleChange = (event) => {
+    setText(event.target.value);
     setError("");
-  };  
+  };
 
-  const handleSubmit = () => {  
-    if (isUrl(text)) {  
-      handleSend(text);  
+  const handleSubmit = () => {
+    if (isUrl(text)) {
+      dispatch(sendData(text));
       setError("");
-    } else {  
-      setError("The Url is not correct");
-    }  
-  }; 
+    } else {
+      setError("The URL is not correct");
+    }
+  };
 
   return (
     <>
@@ -68,7 +64,7 @@ const Fetch = () => {
         component="img"
         image={img1}
         style={{ width: "50vh" }}
-        alt="dcd"
+        alt="Top Banner"
       />
       <Container>
         <Box
@@ -99,7 +95,7 @@ const Fetch = () => {
                   color: "#1976d2",
                 }}
               >
-                Do you want to fetch Data from website ?
+                Do you want to fetch Data from a website?
               </Typography>
               <Typography
                 sx={{
@@ -112,37 +108,43 @@ const Fetch = () => {
                 Here you can enter your link from Amazon, Welcomesudi, Talabat
                 to fetch data
               </Typography>
-
             </Box>
             <CardMedia
               component="img"
               image={img}
               style={{ width: "50vh" }}
-              alt="dcd"
+              alt="Banner"
             />
           </Box>
-          <StyledTextField  
-            error={!!error}
-            helperText={error ?  error : "Please enter your Url" }
-            id="demo-helper-text-misaligned"  
-            label="URL"  
-            sx={{ width: "50%", mb: "20px" }}  
-            onChange={handleChange}  
-            value={text}  
-            InputProps={{  
-              endAdornment: (  
-                <SendIcon  
-                  sx={{  
-                    color: "#1976d2",  
-                    "&:hover": {  
-                      cursor: "pointer",  
-                    },  
-                  }}  
-                  onClick={handleSubmit}  
-                />  
-              ),  
-            }}  
-          /> 
+
+          <StyledTextField
+            error={!!error || !!apiError}
+            helperText={error || apiError || "Please enter your URL"}
+            id="demo-helper-text-misaligned"
+            label="URL"
+            sx={{ width: "50%", mb: "20px" }}
+            onChange={handleChange}
+            value={text}
+            InputProps={{
+              endAdornment: (
+                <SendIcon
+                  sx={{
+                    color: "#1976d2",
+                    "&:hover": {
+                      cursor: "pointer",
+                    },
+                  }}
+                  onClick={handleSubmit}
+                />
+              ),
+            }}
+          />
+          {loading && <Typography sx={{ mt: 2 }}>Sending...</Typography>}
+          {result && (
+            <Typography sx={{ mt: 2, color: "green" }}>
+              Data fetched successfully: {JSON.stringify(result)}
+            </Typography>
+          )}
         </Box>
       </Container>
       <CardMedia
@@ -150,86 +152,10 @@ const Fetch = () => {
         component="img"
         image={img3}
         style={{ width: "35vh" }}
-        alt="dcd"
+        alt="Bottom Banner"
       />
     </>
   );
 };
 
 export default Fetch;
-
-
-// {/* <List sx={{ width: "100%", mt: 4, bgcolor: "background.paper" }}>
-//             <ListItem>
-//               <ListItemAvatar>
-//                 <Avatar alt="User" />
-//               </ListItemAvatar>
-//               <ListItemText
-//                 primary="User Name"
-//                 secondary={
-//                   <Typography
-//                     sx={{ display: "inline" }}
-//                     component="span"
-//                     variant="body2"
-//                   >
-//                     fvev cwdvew vw vdwvewvewv
-//                   </Typography>
-//                 }
-//               />
-//             </ListItem>
-//             <Divider variant="inset" component="li" />
-//             <ListItem>
-//               <ListItemAvatar>
-//                 <Avatar alt="User" />
-//               </ListItemAvatar>
-//               <ListItemText
-//                 primary="User Name"
-//                 secondary={
-//                   <Typography
-//                     sx={{ display: "inline" }}
-//                     component="span"
-//                     variant="body2"
-//                   >
-//                     fvev cwdvew vw vdwvewvewv
-//                   </Typography>
-//                 }
-//               />
-//             </ListItem>
-//             <Divider variant="inset" component="li" />
-//             <ListItem>
-//               <ListItemAvatar>
-//                 <Avatar alt="User" />
-//               </ListItemAvatar>
-//               <ListItemText
-//                 primary="User Name"
-//                 secondary={
-//                   <Typography
-//                     sx={{ display: "inline" }}
-//                     component="span"
-//                     variant="body2"
-//                   >
-//                     fvev cwdvew vw vdwvewvewv
-//                   </Typography>
-//                 }
-//               />
-//             </ListItem>
-//             <Divider variant="inset" component="li" />
-//             <ListItem>
-//               <ListItemAvatar>
-//                 <Avatar alt="User" />
-//               </ListItemAvatar>
-//               <ListItemText
-//                 primary="User Name"
-//                 secondary={
-//                   <Typography
-//                     sx={{ display: "inline" }}
-//                     component="span"
-//                     variant="body2"
-//                   >
-//                     fvev cwdvew vw vdwvewvewv
-//                   </Typography>
-//                 }
-//               />
-//             </ListItem>
-//             <Divider variant="inset" component="li" />
-//           </List> */}

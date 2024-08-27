@@ -23,7 +23,7 @@ export default function ButtonAppBar() {
             sx={{ flexGrow: 1 }}
           ></Typography>
           <Box>
-            <Link to="/">
+            <Link to="/user">
               <Button variant="text" sx={{ color: "white" }}>
                 <HomeOutlined sx={{ ml: "2px" }} />
                 Home
