@@ -38,40 +38,44 @@ function WelcomeBar() {
               justifyContent: "center",
             }}
           >
-            <Button
-              key="Decaptive"
-              onClick={handleCloseNavMenu}
-              sx={{
-                my: 2,
-                mx: 2,
-                display: "block",
-                color: "white",
-                fontWeight: 300,
-                fontSize: 15,
-                "&:hover": {
-                  color: "black",
-                },
-              }}
-            >
-              Decaptive
-            </Button>
-            <Button
-              key="Fetch Data"
-              onClick={handleCloseNavMenu}
-              sx={{
-                my: 2,
-                mx: 2,
-                display: "block",
-                color: "white",
-                fontWeight: 300,
-                fontSize: 15,
-                "&:hover": {
-                  color: "black",
-                },
-              }}
-            >
-              Fetch Data
-            </Button>
+            <Link to="/sign-in" style={{ textDecoration: "none" }}>
+              <Button
+                key="Decaptive"
+                // onClick={handleCloseNavMenu}
+                sx={{
+                  my: 2,
+                  mx: 2,
+                  display: "block",
+                  color: "white",
+                  fontWeight: 300,
+                  fontSize: 15,
+                  "&:hover": {
+                    color: "black",
+                  },
+                }}
+              >
+                Decaptive
+              </Button>
+            </Link>
+            <Link to="/sign-in" style={{ textDecoration: "none" }}>
+              <Button
+                key="Fetch Data"
+                onClick={handleCloseNavMenu}
+                sx={{
+                  my: 2,
+                  mx: 2,
+                  display: "block",
+                  color: "white",
+                  fontWeight: 300,
+                  fontSize: 15,
+                  "&:hover": {
+                    color: "black",
+                  },
+                }}
+              >
+                Fetch Data
+              </Button>
+            </Link>
           </Box>
           {/* the logo for big device  */}
           <Box
@@ -194,23 +198,25 @@ function WelcomeBar() {
               justifyContent: "center",
             }}
           >
-            <Button
-              key="About"
-              onClick={handleCloseNavMenu}
-              sx={{
-                my: 2,
-                mx: 2,
-                display: "block",
-                color: "white",
-                fontWeight: 300,
-                fontSize: 15,
-                "&:hover": {
-                  color: "black",
-                },
-              }}
-            >
-              About
-            </Button>
+            <Link to="/sign-in" style={{ textDecoration: "none" }}>
+              <Button
+                key="About"
+                onClick={handleCloseNavMenu}
+                sx={{
+                  my: 2,
+                  mx: 2,
+                  display: "block",
+                  color: "white",
+                  fontWeight: 300,
+                  fontSize: 15,
+                  "&:hover": {
+                    color: "black",
+                  },
+                }}
+              >
+                About
+              </Button>
+            </Link>
             <Link to="/sign-in" style={{ textDecoration: "none" }}>
               <Button
                 key="About"
