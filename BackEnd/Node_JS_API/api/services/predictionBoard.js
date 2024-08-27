@@ -1,55 +1,84 @@
+const ScrapPredict = require('../models/ScrapPredict');
+const Prediction = require('../models/Prediction');
+const { resetWeeklyDataIfNewWeek } = require('../cron/resetWeeklyData');
 
-const Prediction = require('../models/Prediction'); 
-const ScrapPredict = require('../models/ScrapPredict'); 
-const getWeeklyUsage = async () => {
-    const scrapUsage = await ScrapPredict.aggregate([
-        {
-            $project: {
-                dayOfWeek: { $dayOfWeek: "$createdAt" } 
+const getWeeklyPredictUsage = async () => {
+    try {
+        await resetWeeklyDataIfNewWeek();
+
+        // تحديد بداية ونهاية الأسبوع الحالي
+        const startOfWeek = new Date();
+        startOfWeek.setHours(0, 0, 0, 0);
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(endOfWeek.getDate() + 7); 
+
+        // جمع بيانات استخدام ScrapPredict
+        const scrapUsage = await ScrapPredict.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: startOfWeek, $lt: endOfWeek }
+                }
+            },
+            {
+                $project: {
+                    dayOfWeek: { $dayOfWeek: "$createdAt" }
+                }
+            },
+            {
+                $group: {
+                    _id: "$dayOfWeek",
+                    count: { $sum: 1 }
+                }
             }
-        },
-        {
-            $group: {
-                _id: "$dayOfWeek",  
-                count: { $sum: 1 } 
+        ]);
+
+        // جمع بيانات استخدام Prediction
+        const predictionUsage = await Prediction.aggregate([
+            {
+                $match: {
+                    timestamp: { $gte: startOfWeek, $lt: endOfWeek }
+                }
+            },
+            {
+                $project: {
+                    dayOfWeek: { $dayOfWeek: "$timestamp" }
+                }
+            },
+            {
+                $group: {
+                    _id: "$dayOfWeek",
+                    count: { $sum: 1 }
+                }
             }
-        }
-    ]);
+        ]);
 
-    const predictionUsage = await Prediction.aggregate([
-        {
-            $project: {
-                dayOfWeek: { $dayOfWeek: "$timestamp" } 
+        // دمج البيانات
+        const combinedUsage = scrapUsage.concat(predictionUsage);
+
+        // تجميع البيانات حسب اليوم
+        const usageByDay = combinedUsage.reduce((acc, curr) => {
+            if (!acc[curr._id]) {
+                acc[curr._id] = 0;
             }
-        },
-        {
-            $group: {
-                _id: "$dayOfWeek", 
-                count: { $sum: 1 }  
-            }
-        }
-    ]);
+            acc[curr._id] += curr.count;
+            return acc;
+        }, {});
 
-    const combinedUsage = scrapUsage.concat(predictionUsage);
+        const dayNames = [
+            "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+        ];
 
-    const usageByDay = combinedUsage.reduce((acc, curr) => {
-        if (!acc[curr._id]) {
-            acc[curr._id] = 0;
-        }
-        acc[curr._id] += curr.count;
-        return acc;
-    }, {});
-
-    const dayNames = [
-        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
-    ];
-
-    return Object.keys(usageByDay).map(day => ({
-        day: dayNames[parseInt(day) - 1], 
-        count: usageByDay[day]
-    }));
+        // تحويل البيانات إلى الشكل المناسب
+        return Object.keys(usageByDay).map(day => ({
+            day: dayNames[parseInt(day) - 1],
+            count: usageByDay[day]
+        }));
+    } catch (error) {
+        console.error('Error occurred while getting weekly predict usage:', error);
+        throw new Error('Error retrieving predict usage statistics');
+    }
 };
 
-
-
-module.exports = { getWeeklyUsage };
+module.exports = { getWeeklyPredictUsage };

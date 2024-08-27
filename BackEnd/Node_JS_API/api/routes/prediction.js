@@ -3,8 +3,8 @@ const router = express.Router();
 const axios = require('axios');
 
 const Prediction = require('../models/Prediction');
-const { logUsage } = require('../services/logService');
-const { AdminlogUsage } = require('../services/AdminlogService'); 
+
+const { AdminlogUsage, logUsage } = require('../services/logService');
 
 const checkAuth = require('../middleware/authMiddleware');
 

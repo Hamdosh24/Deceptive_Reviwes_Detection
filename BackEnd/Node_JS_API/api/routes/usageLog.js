@@ -4,22 +4,28 @@ const UsageLog = require('../models/UsageLog');
 const checkAuth = require('../middleware/authMiddleware');
 
 
-
 router.get('/', checkAuth, async (req, res) => {
-  try {
-      // الحصول على معرف المستخدم من التوكن
-      const userId = req.userData.id || req.userData.userId;
+    try {
+        const userId = req.userData.id || req.userData.userId;
 
-      // جلب العمليات الخاصة بالمستخدم فقط
-      const logs = await UsageLog.find({ userId });
+        if (!userId) {
+            return res.status(400).json({ error: 'User ID not found in the token' });
+        }
 
-      // إرسال السجلات كاستجابة
-      res.status(200).json(logs);
-  } catch (error) {
-      console.error('Error fetching user logs:', error);
-      res.status(500).json({ error: 'Failed to fetch user logs' });
-  }
+        const logs = await UsageLog.find({ userId }).exec();
+
+        if (!logs || logs.length === 0) {
+            return res.status(404).json({ message: 'No logs found for this user' });
+        }
+
+        res.status(200).json({ logs });
+    } catch (error) {
+        console.error('Error fetching user logs:', error.message);
+        res.status(500).json({ error: 'Failed to fetch user logs', details: error.message });
+    }
 });
+
+
 
 
 module.exports = router;
