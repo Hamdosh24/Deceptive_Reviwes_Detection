@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const axios = require('axios');
 
 const Prediction = require('../models/Prediction');
@@ -10,47 +9,46 @@ const { AdminlogUsage } = require('../services/AdminlogService');
 const checkAuth = require('../middleware/authMiddleware');
 
 router.post('/', checkAuth, async (req, res) => {
-    const userId = req.userData.id || req.userData.userId; 
-    if (!userId) {
-        return res.status(400).json({ error: 'User ID is missing' });
-    }
+    const userId = req.userData.id || req.userData.userId;
+ 
+    const inputTexts = req.body;
 
-    const inputTexts = req.body.inputTexts;
 
     if (!inputTexts || !Array.isArray(inputTexts)) {
-        return res.status(400).json({ error: 'Data is required' });
+        return res.status(400).json({ error: 'Data is required and must be an array' });
     }
 
-    // تحويل النصوص إلى الشكل المناسب إذا لزم الأمر
-const formattedInputTexts = inputTexts.map(text => text.text || text);
-
     try {
+        const formattedInputTexts = inputTexts.map(item => item.text);
         const response = await axios.post('http://0.0.0.0:3000/predict_text', { inputTexts: formattedInputTexts });
 
-        // تسجيل الاستجابة للتحقق من نوع البيانات
         console.log('Response data:', response.data);
 
-        // التأكد من أن response.data هو مصفوفة
         if (!Array.isArray(response.data.reviews_info)) {
             throw new Error('Expected response.data.reviews_info to be an array');
         }
 
+        const labels = response.data.reviews_info.map(item => item.label);
+
         const newPrediction = new Prediction({
             userId: userId,
             inputTexts: inputTexts,
-            labels: response.data.reviews_info.map(item => item.label)
+            labels: labels,
+            timestamp: new Date() 
         });
 
         await newPrediction.save();
 
+
         const reviewsWithDetails = response.data.reviews_info.map((item, index) => {
-            const text = item.text || 'No text';
+            const text = inputTexts[index].text;
             const label = item.label || 'No label';
             const time = Date.now();
             logUsage(userId, 'predictionService', { text, label }, time);
             AdminlogUsage(userId, 'predictionService', { text, label }, time);
 
             return {
+                id: inputTexts[index].id,
                 text: text,
                 label: label,
                 pred_vec: item.pred_vec || 'No pred_vec',
@@ -68,19 +66,21 @@ const formattedInputTexts = inputTexts.map(text => text.text || text);
     }
 });
 
+
+
+
+
 module.exports = router;
 
 
-
-
-// {
-//     "inputTexts": [
-//         "كريم قلاش",
-//         "النص الثاني",
-//         "النص الثالث"
-//     ]
-// }
-
+// [
+//     {
+//         "text": "هو جيد بس ما عرفت كيف استخدمه 💀 "
+//     },
+//     {
+//         "text": "جيدة وتقص كل شي"
+//     }
+// ]
 
 
 

@@ -3,11 +3,10 @@ const router = express.Router();
 
 const checkAuth = require('../middleware/authMiddleware');
 const checkAdmin = require('../middleware/check-admin');
-
 const Feedback = require('../models/Feedback');
 
 
-router.post('/Send', checkAuth, async (req, res) => {
+router.post('/send', checkAuth, async (req, res) => {
     const { message, rating } = req.body;
 
     if (!message || rating === undefined) {

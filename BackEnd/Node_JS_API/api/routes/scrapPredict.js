@@ -1,33 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const ScrapPredict = require('../models/ScrapPredict'); // استيراد الموديل
-const { logUsage } = require('../services/logService'); // تأكد من مسار الملف الصحيح
-const { AdminlogUsage } = require('../services/AdminlogService'); // تأكد من مسار الملف الصحيح
+const ScrapPredict = require('../models/ScrapPredict');
+const { logUsage } = require('../services/logService'); 
+const { AdminlogUsage } = require('../services/AdminlogService'); 
 const checkAuth = require('../middleware/authMiddleware');
-
 
 
 async function processScrapingAndPrediction(scrapUrl, req, res) {
     try {
-        const { id, url } = req.body;
+        const { url } = req.body;
         const userId = req.userData.id || req.userData.userId;
         const time = Date.now();
 
-        // تسجيل الاستخدام
         await logUsage(userId, 'scrap And Predict Service', { url }, time);
         await AdminlogUsage(userId, 'scrap And Predict Service', { url }, time);
 
-        // تخزين id و url في MongoDB
-        await ScrapPredict.create({ id, url });
+        const scrapResult = await ScrapPredict.create({ url });
 
-        // طلب البيانات من خدمة scraping
-        const response = await axios.post(scrapUrl, { id, url });
+        const response = await axios.post(scrapUrl, { id: scrapResult._id, url });
 
-        // تحقق من البيانات المستلمة
         console.log('Response from scrap service:', response.data);
 
-        // استخراج المراجعات
         const reviews = response.data.Reviews ? response.data.Reviews.map(review => ({
             text: review.Text,
             rating: review.Ratting
@@ -37,26 +31,23 @@ async function processScrapingAndPrediction(scrapUrl, req, res) {
 
         console.log('Sending inputTexts to prediction:', inputTexts);
 
-        // إرسال النصوص إلى خدمة التنبؤ
         axios.post('http://0.0.0.0:3000/predict_url', { inputTexts })
             .then(predictionResponse => {
                 console.log('Response from external service:', predictionResponse.data);
 
-                // تحقق من تنسيق الاستجابة
                 const predictionData = predictionResponse.data.reviews_info;
                 const mostCommonWords = predictionResponse.data.most_common_words;
-                const nounAndAdj = predictionResponse.data.noun_and_adj
+                const nounAndAdj = predictionResponse.data.noun_and_adj;
 
                 if (Array.isArray(predictionData)) {
-                    // الربط بين المراجعات والنتائج المتوقعة
                     const reviewsWithLabels = reviews.map((review, index) => ({
                         text: review.text,
                         rating: review.rating,
                         label: predictionData[index]?.label || 'No label',
                         pred_vec: predictionData[index]?.pred_vec || 'No pred_vec',
                         polarity: predictionData[index]?.polarity || 'No polarity',
-
                     }));
+
                     console.log('Most Common Words:', mostCommonWords);
                     console.log('Nouns and Adjectives:', nounAndAdj);
 
@@ -80,20 +71,31 @@ async function processScrapingAndPrediction(scrapUrl, req, res) {
 }
 
 
+router.post('/', checkAuth, async (req, res) => {
+    const { url } = req.body;
 
-// Route for welcomesaudi
-router.post('/welcomesaudi', checkAuth, async (req, res) => {
-    await processScrapingAndPrediction('http://localhost:5000/scrap/welcomesaudi', req, res);
-});
+    let scrapUrl;
 
-// Route for ebay/seller
-router.post('/ebay/seller', checkAuth, async (req, res) => {
-    await processScrapingAndPrediction('http://localhost:5000/scrap/ebay/seller', req, res);
-});
+    if (url.includes('welcomesaudi.com')) {
+        scrapUrl = 'http://localhost:5000/scrap/welcomesaudi';
+    } else if (url.includes('ebay.com')) {
+        scrapUrl = 'http://localhost:5000/scrap/ebay/proudect';
+    }else if(url.includes('talabat.com/')){
+        scrapUrl='http://localhost:5000/scrap/talabat';
+    } else {
+        return res.status(400).json({ error: 'Unsupported URL' });
+    }
 
-// Route for ebay/proudect
-router.post('/ebay/proudect', checkAuth, async (req, res) => {
-    await processScrapingAndPrediction('http://localhost:5000/scrap/ebay/proudect', req, res);
+    await processScrapingAndPrediction(scrapUrl, req, res);
 });
 
 module.exports = router;
+
+
+
+
+
+// {
+//     "id": "duh12",
+//     "url": "https://welcomesaudi.com/ar/activity/masjid-shuhada-uhud-madinah"
+// }
