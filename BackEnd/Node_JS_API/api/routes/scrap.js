@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const ScrapResult = require('../models/ScrapResult'); 
-const { logUsage } = require('../services/logService'); 
-const { AdminlogUsage } = require('../services/AdminlogService'); 
+const { AdminlogUsage, logUsage } = require('../services/logService');
 const checkAuth = require('../middleware/authMiddleware');
 
 

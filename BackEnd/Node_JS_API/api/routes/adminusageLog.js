@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const AdminUsageLog = require('../models/AdminUsageLog');
 const checkAuth = require('../middleware/authMiddleware');
 const checkAdmin = require('../middleware/check-admin');
-const { getWeeklyUsage } = require('../services/predictionBoard');
-const { getWeeklyScrapUsage } = require('../services/ScrapBoard'); 
+const { getWeeklyPredictUsage } = require('../services/predictionBoard');
+const { getWeeklyScrapUsage } = require('../services/ScrapBoard');
+const { resetWeeklyDataIfNewWeek } = require('../cron/resetWeeklyData');
+const AdminUsageLog = require('../models/AdminUsageLog');
+
 
 
 
@@ -24,16 +26,16 @@ router.get('/adminlogs', checkAuth,checkAdmin, async (req, res) => {
     }
 });
 
-router.get('/predict-usage-stats',checkAuth,checkAdmin, async (req, res) => {
+router.get('/predict-usage-stats', checkAuth, checkAdmin, async (req, res) => {
     try {
-        const usageStats = await getWeeklyUsage();
-        res.status(200).json(usageStats);
+        await resetWeeklyDataIfNewWeek(); // تأكد من تصفير البيانات إذا لزم الأمر
+        const weeklyPredictUsage = await getWeeklyPredictUsage();
+        res.status(200).json(weeklyPredictUsage);
     } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Error retrieving usage statistics' });
+        console.error('Error occurred while fetching weekly usage:', error);
+        res.status(500).json({ error: 'Failed to fetch weekly usage' });
     }
-});
-
+})
 router.get('/scrap-usage-stats', checkAuth,checkAdmin, async (req, res) => {
     try {
         const usageStats = await getWeeklyScrapUsage();

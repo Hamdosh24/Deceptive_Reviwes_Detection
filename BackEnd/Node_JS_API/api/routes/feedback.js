@@ -5,7 +5,6 @@ const checkAuth = require('../middleware/authMiddleware');
 const checkAdmin = require('../middleware/check-admin');
 const Feedback = require('../models/Feedback');
 
-
 router.post('/send', checkAuth, async (req, res) => {
     const { message, rating } = req.body;
 
@@ -15,7 +14,10 @@ router.post('/send', checkAuth, async (req, res) => {
 
     const userId = req.userData.id || req.userData.userId;
 
-  
+    if (rating < 1 || rating > 5) {
+        return res.status(400).json({ message: 'التقييم يجب أن يكون بين 1 و 5' });
+    }
+
     const feedback = new Feedback({
         userId, 
         message,
@@ -24,11 +26,13 @@ router.post('/send', checkAuth, async (req, res) => {
 
     try {
         const savedFeedback = await feedback.save();
-        res.status(201).json(savedFeedback);
+        res.status(201).json({ message: 'تم إرسال التعليق بنجاح', feedback: savedFeedback });
     } catch (error) {
-        res.status(500).json({ message: 'حدث خطأ أثناء حفظ التعليق', error });
+        console.error('Error saving feedback:', error);
+        res.status(500).json({ message: 'حدث خطأ أثناء حفظ التعليق', error: error.message });
     }
 });
+
 
 
 router.get('/feedbacks', checkAuth,checkAdmin, async (req, res) => {
