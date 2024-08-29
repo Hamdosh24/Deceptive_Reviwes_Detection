@@ -5,23 +5,19 @@ const checkAuth = require('../middleware/authMiddleware');
 const checkAdmin = require('../middleware/check-admin');
 const Feedback = require('../models/Feedback');
 
-router.post('/send', checkAuth, async (req, res) => {
-    const { message, rating } = req.body;
+router.post('/send_feedback', checkAuth, async (req, res) => {
+    const { message } = req.body;
 
-    if (!message || rating === undefined) {
+    if (!message=== undefined) {
         return res.status(400).json({ message: 'يرجى ملء جميع الحقول المطلوبة' });
     }
 
     const userId = req.userData.id || req.userData.userId;
 
-    if (rating < 1 || rating > 5) {
-        return res.status(400).json({ message: 'التقييم يجب أن يكون بين 1 و 5' });
-    }
 
     const feedback = new Feedback({
         userId, 
         message,
-        rating,
     });
 
     try {
@@ -35,7 +31,7 @@ router.post('/send', checkAuth, async (req, res) => {
 
 
 
-router.get('/feedbacks', checkAuth,checkAdmin, async (req, res) => {
+router.get('/get_feedbacks', checkAuth, async (req, res) => {
     try {
         const feedbacks = await Feedback.find()
             .populate('userId', 'firstName lastName email') 
@@ -48,6 +44,26 @@ router.get('/feedbacks', checkAuth,checkAdmin, async (req, res) => {
     }
 });
 
+router.delete('/delete_feedback', checkAuth,checkAdmin, async (req, res) => {
+    const { message } = req.body;
+
+    if (!message) {
+        return res.status(400).json({ message: 'يرجى توفير النص لحذف التعليق' });
+    }
+
+    try {
+        const deletedFeedback = await Feedback.findOneAndDelete({ message });
+
+        if (!deletedFeedback) {
+            return res.status(404).json({ message: 'التعليق غير موجود' });
+        }
+
+        res.status(200).json({ message: 'تم حذف التعليق بنجاح', feedback: deletedFeedback });
+    } catch (error) {
+        console.error('Error deleting feedback:', error);
+        res.status(500).json({ message: 'حدث خطأ أثناء حذف التعليق', error: error.message });
+    }
+});
 
 
 module.exports = router;

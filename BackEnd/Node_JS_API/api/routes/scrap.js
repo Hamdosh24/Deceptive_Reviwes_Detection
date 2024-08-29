@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const ScrapResult = require('../models/ScrapResult'); 
-const { AdminlogUsage, logUsage } = require('../services/logService');
+const { logUsage } = require('../services/logService');
 const checkAuth = require('../middleware/authMiddleware');
 
 
@@ -13,28 +13,15 @@ async function processScraping(scrapUrl, req, res) {
         const { url } = req.body;  
         const time = Date.now();
 
-    
-        await AdminlogUsage(userId, 'scraping Service', { url }, time);
-        await logUsage(userId, 'scraping Service', { url }, time);
-
+        await logUsage(userId, 'Fetch Data', 'url', { url }, time);
 
         const scrapResult = new ScrapResult({ url });
         await scrapResult.save();
 
         const response = await axios.post(scrapUrl, { id: scrapResult._id, url });
 
-        console.log('Response from scrap service:', response.data);
-
-        const reviews = response.data.Reviews ? response.data.Reviews.map(review => ({
-            text: review.Text,
-            rating: review.Ratting
-        })) : [];
-
-
-        res.status(200).json({
-            message: 'Data received and processed successfully',
-            reviews
-        });
+   
+        res.status(200).json(response.data);
 
     } catch (error) {
         console.error('Error occurred:', error);
@@ -43,8 +30,9 @@ async function processScraping(scrapUrl, req, res) {
 }
 
 
+
   
-router.post('/', checkAuth, async (req, res) => {
+router.post('/Fetch_URL', checkAuth, async (req, res) => {
     const { url } = req.body;
 
     let scrapUrl;

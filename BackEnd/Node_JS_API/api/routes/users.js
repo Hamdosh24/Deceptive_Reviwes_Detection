@@ -13,58 +13,6 @@ const checkAuth = require('../middleware/authMiddleware');
 const checkAdmin = require('../middleware/check-admin');
 
 
-router.post('/create_admin', checkAuth, checkAdmin, async (req, res) => {
-    try {
-        // تحقق من وجود المستخدم بناءً على البريد الإلكتروني
-        const existingUser = await User.findOne({ email: req.body.email });
-        if (existingUser) {
-            return res.status(409).json({ message: 'Email already exists' });
-        }
-
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-
-        const adminUser = new User({
-            _id: new mongoose.Types.ObjectId(),
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            password: hashedPassword,
-            role: 'Admin'
-        });
-
-        await adminUser.save();
-        res.status(201).json({ message: 'Admin created' });
-
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-router.put('/update_role/:id', checkAuth, checkAdmin, async (req, res) => {
-    const { id } = req.params;
-    const { role } = req.body;
-
-    try {
-        const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        if (user.role === role) {
-            return res.status(400).json({ message: 'New role is the same as current role' });
-        }
-
-        user.role = role;
-        const updatedUser = await user.save();
-
-        return res.status(200).json({ message: 'User role updated successfully', user: updatedUser });
-    } catch (err) {
-        return res.status(500).json({ error: err.message });
-    }
-});
-
-
 router.post('/signup', async (req, res) => {
     try {
    
