@@ -5,9 +5,13 @@ const morgan = require("morgan");
 const bodyPareser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cookieParser = require('cookie-parser');
+
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+
 
 const predictionRoutes = require("./api/routes/prediction");
 const userRoutes = require("./api/routes/users");
