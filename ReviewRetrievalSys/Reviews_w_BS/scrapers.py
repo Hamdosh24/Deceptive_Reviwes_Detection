@@ -144,14 +144,6 @@ def talabat_scraper(id, url):
         "Reviews": []
     }
 
-    ratting_map = {
-        "سيء": 1,
-        "عادي": 2,
-        "جيد": 3,
-        "جيد جداً": 4,
-        "رهيب": 5
-    }
-
     GD_PATH = r'C:\Program Files (x86)\chromedriver.exe'
     service = Service(GD_PATH)
 
@@ -176,7 +168,7 @@ def talabat_scraper(id, url):
     reviews = soup.find_all("div", class_="card")
     for review in reviews:
         text = review.find("p").text
-        ratting = ratting_map[review.find("div", class_="ml-1").text]
+        ratting = review.find("div", class_="ml-1").text
 
         res["Reviews"].append({
             'Text': text,

@@ -15,6 +15,7 @@ def get_prediction(input_texts):
 
             output["reviews_info"].append({
                 "id": text["id"],
+                "text": text["text"],
                 "label": label,
                 "pred_vec": pred_vec,
                 "polarity": polarity
@@ -22,6 +23,7 @@ def get_prediction(input_texts):
         else:
             output["reviews_info"].append({
                 "id": text["id"],
+                "text": text["text"],
                 "label": "Unsupported language, Most be Arabic",
                 "pred_vec": "Unsupported language, Most be Arabic",
                 "polarity": "Unsupported language, Most be Arabic"
