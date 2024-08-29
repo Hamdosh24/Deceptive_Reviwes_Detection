@@ -6,7 +6,6 @@ const getWeeklyPredictUsage = async () => {
     try {
         await resetWeeklyDataIfNewWeek();
 
-        // تحديد بداية ونهاية الأسبوع الحالي
         const startOfWeek = new Date();
         startOfWeek.setHours(0, 0, 0, 0);
         startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
@@ -14,7 +13,6 @@ const getWeeklyPredictUsage = async () => {
         const endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(endOfWeek.getDate() + 7); 
 
-        // جمع بيانات استخدام ScrapPredict
         const scrapUsage = await ScrapPredict.aggregate([
             {
                 $match: {
@@ -34,7 +32,6 @@ const getWeeklyPredictUsage = async () => {
             }
         ]);
 
-        // جمع بيانات استخدام Prediction
         const predictionUsage = await Prediction.aggregate([
             {
                 $match: {
@@ -54,10 +51,8 @@ const getWeeklyPredictUsage = async () => {
             }
         ]);
 
-        // دمج البيانات
         const combinedUsage = scrapUsage.concat(predictionUsage);
 
-        // تجميع البيانات حسب اليوم
         const usageByDay = combinedUsage.reduce((acc, curr) => {
             if (!acc[curr._id]) {
                 acc[curr._id] = 0;
@@ -70,7 +65,6 @@ const getWeeklyPredictUsage = async () => {
             "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
         ];
 
-        // تحويل البيانات إلى الشكل المناسب
         return Object.keys(usageByDay).map(day => ({
             day: dayNames[parseInt(day) - 1],
             count: usageByDay[day]
