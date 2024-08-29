@@ -41,7 +41,6 @@ app.use((req, res, next) => {
   next(); //حتى لا اعمل بلوك للركوست تبعي
 });
 
-// //Routes which should handle requests
 app.use("/predict", predictionRoutes);
 app.use("/users", userRoutes);
 app.use("/scrap", scraperRoutes);
@@ -56,7 +55,6 @@ app.use((req, res, next) => {
   next(error);
 });
 app.use((error, req, res, next) => {
-  //handle all errors
   res.status(error.status || 500);
   res.json({
     error: {
