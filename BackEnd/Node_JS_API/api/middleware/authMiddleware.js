@@ -1,22 +1,34 @@
+
 const jwt = require('jsonwebtoken');
 
-module.exports = (req, res, next) => {
+const checkAuth = (req, res, next) => {
     try {
-        const token = req.headers.authorization && req.headers.authorization.split(" ")[1];
-        if (!token) {
+        if (!req.cookies || !req.cookies.token) {
             return res.status(401).json({
                 message: 'No token provided'
             });
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_KEY);
+        const token = req.cookies.token;
+        const jwtKey = process.env.JWT_KEY;
+
+        if (!jwtKey) {
+            return res.status(500).json({
+                message: 'JWT_KEY is not defined'
+            });
+        }
+
+        const decoded = jwt.verify(token, jwtKey);
         req.userData = decoded;
         console.log('Decoded token data:', req.userData);
 
-        next(); 
+        next();
     } catch (error) {
+        console.error('Token verification failed:', error);
         return res.status(401).json({
             message: 'Invalid token'
         });
     }
 };
+
+module.exports = checkAuth;

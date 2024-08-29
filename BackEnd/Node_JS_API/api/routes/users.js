@@ -21,6 +21,7 @@ router.post('/signup', async (req, res) => {
             return res.status(409).json({ message: 'Email already exists' });
         }
 
+
   
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -40,13 +41,22 @@ router.post('/signup', async (req, res) => {
         const token = jwt.sign({
             userId: savedUser._id,
             role: savedUser.role
-        }, process.env.JWT_KEY, { expiresIn: '1h' });
+        }, process.env.JWT_KEY, { expiresIn: '6h' });
+
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.JWT_KEY === 'production',
+            path: '/' 
+        });
+        
 
         return res.status(201).json({
             message: 'User created',
             token: token,
             role: savedUser.role
         });
+
 
     } catch (err) {
         console.error(err);
@@ -69,11 +79,19 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Auth failed' });
         }
 
+        const expiresIn = user.role === 'Admin' ? '1h' : '6h';
 
         const token = jwt.sign({
             userId: user._id,
             role: user.role
-        }, process.env.JWT_KEY, { expiresIn: '1h' });
+        }, process.env.JWT_KEY, { expiresIn })
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.JWT_KEY === 'production',
+            path: '/' 
+        });
+        
 
         return res.status(200).json({
             message: 'Auth successful',
