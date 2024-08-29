@@ -4,7 +4,7 @@ const UsageLog = require('../models/UsageLog');
 const checkAuth = require('../middleware/authMiddleware');
 
 
-router.get('/', checkAuth, async (req, res) => {
+router.get('/get_usagelogs', checkAuth, async (req, res) => {
     try {
         const userId = req.userData.id || req.userData.userId;
 

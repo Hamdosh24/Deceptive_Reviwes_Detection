@@ -15,10 +15,6 @@ const predictionSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        label: {
-            type: String,
-            required: true 
-        }
     }],
     timestamp: {
         type: Date,
