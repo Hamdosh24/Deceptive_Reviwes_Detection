@@ -56,6 +56,24 @@ const Fetch = () => {
     }
   };
 
+  const renderContent = (data) => {
+    if (Array.isArray(data)) {
+      return data.map((item, index) => (
+        <Typography key={index} sx={{ mt: 1 }}>
+          {JSON.stringify(item)}
+        </Typography>
+      ));
+    } else if (typeof data === "object" && data !== null) {
+      return Object.keys(data).map((key) => (
+        <Typography key={key} sx={{ mt: 1 }}>
+          <strong>{key}:</strong> {JSON.stringify(data[key])}
+        </Typography>
+      ));
+    } else {
+      return <Typography sx={{ mt: 1 }}>{JSON.stringify(data)}</Typography>;
+    }
+  };
+
   return (
     <>
       <ButtonAppBar />
@@ -141,9 +159,7 @@ const Fetch = () => {
           />
           {loading && <Typography sx={{ mt: 2 }}>Sending...</Typography>}
           {result && (
-            <Typography sx={{ mt: 2, color: "green" }}>
-              Data fetched successfully: {JSON.stringify(result)}
-            </Typography>
+            <Box sx={{ mt: 2, width: "100%" }}>{renderContent(result)}</Box>
           )}
         </Box>
       </Container>

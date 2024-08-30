@@ -13,7 +13,7 @@ import img from "../images/banner-right-image.png";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
 import { useDispatch, useSelector } from "react-redux";
-import { sendUrl } from "../Store/DataSliceUrl";
+import { sendText } from "../Store/DataSliceText";
 
 const StyledTextField = styled(TextField)({
   "& .MuiOutLinedInput-root": {
@@ -23,16 +23,18 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const Decaptive = () => {
-  const [Url, setUrl] = useState("");
+const DecaptiveText = () => {
+  const [text, setText] = useState("");
   const dispatch = useDispatch();
   const { loading, result, error } = useSelector((state) => state.data);
+  console.log(`the result ${result}`);
 
   const handleChange = (event) => {
-    setUrl(event.target.value);
+    setText(event.target.value);
   };
+
   const handleSend = () => {
-    dispatch(sendUrl({ input: Url }));
+    dispatch(sendText({ input: text }));
   };
 
   return (
@@ -98,10 +100,10 @@ const Decaptive = () => {
           </Box>
           <StyledTextField
             id="demo-helper-text-misaligned"
-            label="URL"
+            label={"Text"}
             sx={{ width: "50%", mb: "20px" }}
-            value={Url}
             onChange={handleChange}
+            value={text}
             InputProps={{
               endAdornment: (
                 <SendIcon
@@ -119,7 +121,7 @@ const Decaptive = () => {
           {loading && <Typography sx={{ mt: 2 }}>Sending...</Typography>}
           {result && (
             <Typography sx={{ mt: 2, color: "green" }}>
-              The Text was : {JSON.stringify(result.reviews_info[0].label)}
+              The Text was : {JSON.stringify(result)}
             </Typography>
           )}
           {error && (
@@ -138,4 +140,4 @@ const Decaptive = () => {
   );
 };
 
-export default Decaptive;
+export default DecaptiveText;

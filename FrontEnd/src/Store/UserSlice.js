@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Async thunk for sign-in
 const signin = createAsyncThunk("user/signin", async (credentials) => {
   console.log("🚀 ~ signin ~ credentials:", { credentials });
   try {
@@ -12,7 +11,6 @@ const signin = createAsyncThunk("user/signin", async (credentials) => {
     const response = request.data;
     console.log("🚀 ~ signin ~ response:", response);
 
-    // Attempt to store in localStorage
     try {
       localStorage.setItem("user", JSON.stringify(response));
       console.log("User stored in localStorage");
@@ -27,7 +25,6 @@ const signin = createAsyncThunk("user/signin", async (credentials) => {
   }
 });
 
-// Async thunk for sign-up
 const signup = createAsyncThunk("user/signup", async (userData) => {
   console.log("🚀 ~ signup ~ userData:", { userData });
   try {
@@ -38,7 +35,6 @@ const signup = createAsyncThunk("user/signup", async (userData) => {
     const response = request.data;
     console.log("🚀 ~ signup ~ response:", response);
 
-    // Attempt to store in localStorage
     try {
       localStorage.setItem("user", JSON.stringify(response));
       console.log("User stored in localStorage");
@@ -53,7 +49,32 @@ const signup = createAsyncThunk("user/signup", async (userData) => {
   }
 });
 
-// User slice for sign-in and sign-up
+const updateUser = createAsyncThunk("user/updateUser", async (userData) => {
+  console.log("🚀 ~ updateUser ~ userData:", { userData });
+  try {
+    const request = await axios.put(
+      "http://localhost:3001/users/ubdate_user",
+      { firstName: userData.firstName },
+      { lastName: userData.lastName },
+      { password: userData.password }
+    );
+    const response = request.data;
+    console.log("🚀 ~ updateUser ~ response:", response);
+
+    try {
+      localStorage.setItem("user", JSON.stringify(response));
+      console.log("User updated in localStorage");
+    } catch (storageError) {
+      console.error("Could not update user in localStorage:", storageError);
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error during updating user data:", error);
+    throw error;
+  }
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -71,7 +92,7 @@ const userSlice = createSlice({
       .addCase(signin.fulfilled, (state, action) => {
         console.log("🚀 ~ .addCase ~ action:", action);
         state.loading = false;
-        state.user = action.payload; // Update user state with signed-in user data
+        state.user = action.payload;
         state.error = null;
       })
       .addCase(signin.rejected, (state, action) => {
@@ -87,16 +108,30 @@ const userSlice = createSlice({
       .addCase(signup.fulfilled, (state, action) => {
         console.log("🚀 ~ .addCase ~ action:", action);
         state.loading = false;
-        state.user = action.payload; // Update user state with signed-up user data
+        state.user = action.payload;
         state.error = null;
       })
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
         state.error = action.error.message;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        console.log("🚀 ~ .addCase ~ action:", action);
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });
 
-export { signup, signin };
+export { signup, signin, updateUser };
 export default userSlice.reducer;

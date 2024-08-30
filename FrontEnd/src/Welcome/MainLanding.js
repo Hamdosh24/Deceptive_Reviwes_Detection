@@ -3,9 +3,11 @@ import React from "react";
 import WelcomeBar from "./WelcomeBar";
 import image from "../images/banner.png";
 import image1 from "../images/landing.jpeg";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const MainLanding = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <WelcomeBar />
@@ -50,21 +52,20 @@ const MainLanding = () => {
               reviews we encounter whether on social media platforms or
               e-commerce sites.
             </Typography>
-            <Link to="/sign-in" style={{ textDecoration: "none" }}>
-              <Button
-                variant="contained"
-                sx={{
-                  mt: 10,
-                  mb: 10,
-                  fontSize: 15,
-                  borderRadius: 25,
-                  paddingX: 10,
-                  textDecoration: "none",
-                }}
-              >
-                Try it
-              </Button>
-            </Link>
+            <Button
+              variant="contained"
+              sx={{
+                mt: 10,
+                mb: 10,
+                fontSize: 15,
+                borderRadius: 25,
+                paddingX: 10,
+                textDecoration: "none",
+              }}
+              onClick={() => navigate("/sign-in")}
+            >
+              Try it
+            </Button>
           </Box>
         </Container>
       </Box>

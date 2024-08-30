@@ -3,7 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import { useNavigate } from "react-router-dom"; // استيراد useNavigate
+import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -19,6 +19,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import WelcomeBar from "../Welcome/WelcomeBar";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux"; // استيراد useDispatch و useSelector
+import { signin } from "../Store/UserSlice"; // استيراد الـ signin action من Redux
 
 // Schema for validation
 const validationSchema = Yup.object({
@@ -32,7 +34,10 @@ const validationSchema = Yup.object({
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate(); // تهيئة useNavigate
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userState = useSelector((state) => state.user);
+  console.log({ userState });
 
   return (
     <>
@@ -67,7 +72,16 @@ export default function SignIn() {
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
-              console.log("Form values:", values);
+              dispatch(signin(values))
+                .unwrap()
+                .then(() => {
+                  if (userState?.user.role === "Admin") navigate("/admin");
+                  else navigate("/user");
+                })
+                .catch((error) => {
+                  console.error("Error during signin:", error);
+                })
+                .finally(() => setSubmitting(false));
             }}
           >
             {({
@@ -142,7 +156,6 @@ export default function SignIn() {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                   disabled={isSubmitting}
-                  onClick={() => navigate("/user")}
                 >
                   {isSubmitting ? "Signing In..." : "Sign In"}
                 </Button>
@@ -153,6 +166,11 @@ export default function SignIn() {
                     </Button>
                   </Grid>
                 </Grid>
+                {userState?.error && (
+                  <Typography sx={{ mt: 2, color: "red" }}>
+                    Error: Email or password is not correct
+                  </Typography>
+                )}
               </Box>
             )}
           </Formik>

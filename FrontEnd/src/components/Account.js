@@ -18,7 +18,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import LogoutIcon from "@mui/icons-material/Logout";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function stringAvatar(name) {
   return {
@@ -31,6 +31,7 @@ function stringAvatar(name) {
 
 export default function Sidebar() {
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -73,87 +74,59 @@ export default function Sidebar() {
           }}
         >
           <Typography>{userName}</Typography>
-          <Link to="/edit">
-            <Button startIcon={<EditIcon />} size="small" sx={{ marginTop: 1 }}>
-              <Box>Edit</Box>
-            </Button>
-          </Link>
+          <Button
+            startIcon={<EditIcon />}
+            size="small"
+            sx={{ marginTop: 1 }}
+            onClick={() => navigate("/edit")}
+          >
+            <Box>Edit</Box>
+          </Button>
         </Box>
       </Box>
       <Divider />
       <List>
         {/* ////////////////////////////////////////////////////////////////////////// */}
 
-        <Link to="/history" style={{ textDecoration: "none" }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <HistoryIcon sx={{ color: "#1976d2" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary="History"
-                sx={{ color: "black", textDecoration: "none" }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </Link>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => navigate("/history")}>
+            <ListItemIcon>
+              <HistoryIcon sx={{ color: "#1976d2" }} />
+            </ListItemIcon>
+            <ListItemText
+              primary="History"
+              sx={{ color: "black", textDecoration: "none" }}
+            />
+          </ListItemButton>
+        </ListItem>
+
         {/* ////////////////////////////////////////////////////////////////////////// */}
 
-        {/* <Link to="/about" style={{ textDecoration: "none" }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <InfoIcon
-                  sx={{
-                    color: "#1976d2",
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText
-                primary="About"
-                sx={{ color: "black", textDecoration: "none" }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </Link> */}
-        {/* ////////////////////////////////////////////////////////////////////////// */}
-
-        <Link to="/feedback" style={{ textDecoration: "none" }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <FeedbackIcon
-                  sx={{
-                    color: "#1976d2",
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText
-                primary="FeedBack"
-                sx={{ color: "black", textDecoration: "none" }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </Link>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => navigate("/feedback")}>
+            <ListItemIcon>
+              <FeedbackIcon sx={{ color: "#1976d2" }} />
+            </ListItemIcon>
+            <ListItemText
+              primary="FeedBack"
+              sx={{ color: "black", textDecoration: "none" }}
+            />
+          </ListItemButton>
+        </ListItem>
         <Divider />
+
         {/* ////////////////////////////////////////////////////////////////////////// */}
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <LogoutIcon
-                  sx={{
-                    color: "#1976d2",
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText
-                primary="Log Out"
-                sx={{ color: "black", textDecoration: "none" }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </Link>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => navigate("/sign-in")}>
+            <ListItemIcon>
+              <LogoutIcon sx={{ color: "#1976d2" }} />
+            </ListItemIcon>
+            <ListItemText
+              primary="Log Out"
+              sx={{ color: "black", textDecoration: "none" }}
+            />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );

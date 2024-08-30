@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   CardMedia,
@@ -12,11 +13,50 @@ import {
 } from "@mui/material";
 import DataTable from "react-data-table-component";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllUserAccounts, deleteUserAccount } from "../Store/AccountAdmin";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
 import MainDash from "./MainDash";
 
 const AccountDash = () => {
+  const dispatch = useDispatch();
+
+  const {
+    data: users,
+    loading,
+    error,
+  } = useSelector((state) => state.user_accounts_admin);
+
+  const [records, setRecords] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [searchField, setSearchField] = useState("email");
+  const [searchValue, setSearchValue] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchAllUserAccounts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setRecords(users);
+  }, [users]);
+
+  function handleFilter(event) {
+    const value = event.target.value;
+    setSearchValue(value);
+    const newData = users.filter((row) => {
+      return row[searchField].toLowerCase().includes(value.toLowerCase());
+    });
+    setRecords(newData);
+  }
+
+  function handleDelete() {
+    selectedRows.forEach((row) => {
+      dispatch(deleteUserAccount(row.id));
+    });
+    setSelectedRows([]);
+  }
+
   const columns = [
     {
       name: (
@@ -38,7 +78,7 @@ const AccountDash = () => {
           First Name
         </Typography>
       ),
-      selector: (row) => row.fname,
+      selector: (row) => row.first_name,
     },
     {
       name: (
@@ -49,7 +89,7 @@ const AccountDash = () => {
           Last Name
         </Typography>
       ),
-      selector: (row) => row.lname,
+      selector: (row) => row.last_name,
     },
     {
       name: (
@@ -63,125 +103,6 @@ const AccountDash = () => {
       selector: (row) => row.email,
     },
   ];
-
-  const data = [
-    {
-      id: 1,
-      fname: "nour",
-      lname: "alassad",
-      email: "ascascsa@gmail.com",
-    },
-    {
-      id: 2,
-      fname: "asac",
-      lname: "alagbgs",
-      email: "ascvss@gmail.com",
-    },
-    {
-      id: 3,
-      fname: "saac",
-      lname: "mymjtyy",
-      email: "hthtrhrht@gmail.com",
-    },
-    {
-      id: 4,
-      fname: "kareem",
-      lname: "qallash",
-      email: "kareem@gmail.com",
-    },
-    {
-      id: 5,
-      fname: "hytyt",
-      lname: "alashytytsad",
-      email: "thrhtrhtrh@gmail.com",
-    },
-    {
-      id: 6,
-      fname: "jytyt",
-      lname: "alanrttnssad",
-      email: "rhthrhtr@gmail.com",
-    },
-    {
-      id: 7,
-      fname: "myuj",
-      lname: "reegg",
-      email: "grebvvj@gmail.com",
-    },
-    {
-      id: 8,
-      fname: "nrntr",
-      lname: "rgbtr",
-      email: "brtrrn@gmail.com",
-    },
-    {
-      id: 9,
-      fname: "hamdoush",
-      lname: "ali",
-      email: "dscasa@gmail.com",
-    },
-    {
-      id: 10,
-      fname: "dsds",
-      lname: "vdsv",
-      email: "vdsv@gmail.com",
-    },
-    {
-      id: 11,
-      fname: "vdsvsdv",
-      lname: "vdsvsd",
-      email: "vdsvds@gmail.com",
-    },
-    {
-      id: 12,
-      fname: "novdsvsdur",
-      lname: "vsdv",
-      email: "vdsvs@gmail.com",
-    },
-    {
-      id: 13,
-      fname: "vsdsdv",
-      lname: "asas",
-      email: "vdsvfb@gmail.com",
-    },
-    {
-      id: 14,
-      fname: "jytjyu",
-      lname: "jytjtyj",
-      email: "yjtjjyt@gmail.com",
-    },
-    {
-      id: 15,
-      fname: "noyhthur",
-      lname: "trhtrht",
-      email: "trhtrhr@gmail.com",
-    },
-    {
-      id: 16,
-      fname: "htrh",
-      lname: "alashtrhsad",
-      email: "hrtrhtrht@gmail.com",
-    },
-  ];
-
-  const [records, setRecords] = useState(data);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [searchField, setSearchField] = useState("email");
-  const [searchValue, setSearchValue] = useState("");
-
-  function handleFilter(event) {
-    const value = event.target.value;
-    setSearchValue(value);
-    const newData = data.filter((row) => {
-      return row[searchField].toLowerCase().includes(value.toLowerCase());
-    });
-    setRecords(newData);
-  }
-
-  function handleDelete() {
-    const newRecords = records.filter((row) => !selectedRows.includes(row));
-    setRecords(newRecords);
-    setSelectedRows([]);
-  }
 
   const customStyles = {
     rows: {
@@ -221,12 +142,11 @@ const AccountDash = () => {
             <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
               <FormControl sx={{ mr: 2 }}>
                 <Select
-                  // labelId="search-field-label"
                   value={searchField}
                   onChange={(e) => setSearchField(e.target.value)}
                 >
-                  <MenuItem value="fname">First Name</MenuItem>
-                  <MenuItem value="lname">Last Name</MenuItem>
+                  <MenuItem value="first_name">First Name</MenuItem>
+                  <MenuItem value="last_name">Last Name</MenuItem>
                   <MenuItem value="email">Email</MenuItem>
                 </Select>
               </FormControl>
@@ -249,17 +169,23 @@ const AccountDash = () => {
               Delete
             </Button>
           </Box>
-          <DataTable
-            columns={columns}
-            data={records}
-            selectableRows
-            onSelectedRowsChange={({ selectedRows }) => {
-              setSelectedRows(selectedRows);
-            }}
-            fixedHeader
-            pagination
-            customStyles={customStyles}
-          />
+          {loading ? (
+            <Typography>Loading...</Typography>
+          ) : error ? (
+            <Alert severity="error">{error}</Alert>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={records}
+              selectableRows
+              onSelectedRowsChange={({ selectedRows }) => {
+                setSelectedRows(selectedRows);
+              }}
+              fixedHeader
+              pagination
+              customStyles={customStyles}
+            />
+          )}
         </Box>
       </Container>
       <CardMedia

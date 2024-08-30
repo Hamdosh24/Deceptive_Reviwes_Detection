@@ -19,13 +19,10 @@ import ListItemText from "@mui/material/ListItemText";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import WarningIcon from "@mui/icons-material/Warning";
-import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import HistoryIcon from "@mui/icons-material/History";
-import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { HomeOutlined } from "@mui/icons-material";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -97,6 +94,7 @@ const Drawer = styled(MuiDrawer, {
 export default function MainDash() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -131,12 +129,14 @@ export default function MainDash() {
           >
             Welcome in the Main DashBoard for Admin
           </Typography>
-          <Link to="/mainDash">
-            <Button variant="text" sx={{ color: "white" }}>
-              <HomeOutlined sx={{ ml: "2px" }} />
-              Home
-            </Button>
-          </Link>
+          <Button
+            variant="text"
+            sx={{ color: "white" }}
+            onClick={() => navigate("/mainDash")}
+          >
+            <HomeOutlined sx={{ ml: "2px" }} />
+            Home
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -152,218 +152,123 @@ export default function MainDash() {
         <Divider />
         <List>
           <ListItem disablePadding sx={{ display: "block" }}>
-            <Link
-              to="/admin/decaptive-dash"s
-              style={{ textDecoration: "none", color: "black" }}
+            <ListItemButton
+              onClick={() => navigate("/accountdash")}
+              sx={{
+                color: "#757575",
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+                "&:hover": {
+                  color: "#1976d2",
+                },
+              }}
             >
-              <ListItemButton
+              <ListItemIcon
                 sx={{
-                  color: "#757575",
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                  color: "inherit",
                   "&:hover": {
                     color: "#1976d2",
                   },
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit",
-                    "&:hover": {
-                      color: "#1976d2",
-                    },
-                  }}
-                >
-                  <WarningIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Decaptive"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Link>
+                <AccountCircle />
+              </ListItemIcon>
+              <ListItemText primary="Accounts" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
           </ListItem>
+
           <ListItem disablePadding sx={{ display: "block" }}>
-            <Link
-              to="/fetsh-dash"
-              style={{ textDecoration: "none", color: "black" }}
+            <ListItemButton
+              onClick={() => navigate("/HistoryDash")}
+              sx={{
+                color: "#757575",
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+                "&:hover": {
+                  color: "#1976d2",
+                },
+              }}
             >
-              <ListItemButton
+              <ListItemIcon
                 sx={{
-                  color: "#757575",
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                  color: "inherit",
                   "&:hover": {
                     color: "#1976d2",
                   },
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit",
-                    "&:hover": {
-                      color: "#1976d2",
-                    },
-                  }}
-                >
-                  <CloudDownloadIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Fetch Data"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Link>
+                <HistoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="History" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
           </ListItem>
+
           <ListItem disablePadding sx={{ display: "block" }}>
-            <Link
-              to="/accountdash"
-              style={{ textDecoration: "none", color: "black" }}
+            <ListItemButton
+              onClick={() => navigate("/feeddash")}
+              sx={{
+                color: "#757575",
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+                "&:hover": {
+                  color: "#1976d2",
+                },
+              }}
             >
-              <ListItemButton
+              <ListItemIcon
                 sx={{
-                  color: "#757575",
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                  color: "inherit",
                   "&:hover": {
                     color: "#1976d2",
                   },
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit",
-                    "&:hover": {
-                      color: "#1976d2",
-                    },
-                  }}
-                >
-                  <AccountCircle />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Accounts"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Link>
-          </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <Link
-              to="/HistoryDash"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItemButton
-                sx={{
-                  color: "#757575",
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                  "&:hover": {
-                    color: "#1976d2",
-                  },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit",
-                    "&:hover": {
-                      color: "#1976d2",
-                    },
-                  }}
-                >
-                  <HistoryIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="History"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Link>
-          </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <Link
-              to="/feeddash"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItemButton
-                sx={{
-                  color: "#757575",
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                  "&:hover": {
-                    color: "#1976d2",
-                  },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit",
-                    "&:hover": {
-                      color: "#1976d2",
-                    },
-                  }}
-                >
-                  <FeedbackIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="FeedBack"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Link>
+                <FeedbackIcon />
+              </ListItemIcon>
+              <ListItemText primary="FeedBack" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
           </ListItem>
           <Divider />
           <ListItem disablePadding sx={{ display: "block" }}>
-            <Link to="/" style={{ textDecoration: "none", color: "black" }}>
-              <ListItemButton
+            <ListItemButton
+              onClick={() => navigate("/sign-in")}
+              sx={{
+                color: "#757575",
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+                "&:hover": {
+                  color: "#1976d2",
+                },
+              }}
+            >
+              <ListItemIcon
                 sx={{
-                  color: "#757575",
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                  color: "inherit",
                   "&:hover": {
                     color: "#1976d2",
                   },
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "inherit",
-                    "&:hover": {
-                      color: "#1976d2",
-                    },
-                  }}
-                >
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Log Out"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Link>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Log Out" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
           </ListItem>
         </List>
       </Drawer>

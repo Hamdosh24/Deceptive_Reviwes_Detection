@@ -1,25 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const sendData = createAsyncThunk("data/sendData", async (inputData) => {
-  console.log("🚀 ~ sendData ~ inputData:", { inputData });
+const sendUrl = createAsyncThunk("data/sendUrl", async ({ input }) => {
+  console.log("🚀 ~ sendUrl ~ input:", { input });
 
   const user = JSON.parse(localStorage.getItem("user"));
   console.log("🚀 ~ user:", { user });
 
   try {
     const response = await axios.post(
-      "http://localhost:3001/scrap/Fetch_URL",
-      inputData,
+      "http://localhost:3001/scrapPredict/Predict_URL",
+      { url: input },
       {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       }
     );
-    console.log("🚀 ~ sendData ~ response:", response.data);
-    console.log(response.data);
-
+    console.log("🚀 ~ sendUrl ~ response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error during data submission:", error);
@@ -27,8 +25,8 @@ const sendData = createAsyncThunk("data/sendData", async (inputData) => {
   }
 });
 
-const dataSlice = createSlice({
-  name: "data",
+const UrlSlice = createSlice({
+  name: "url",
   initialState: {
     loading: false,
     result: null,
@@ -36,18 +34,19 @@ const dataSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(sendData.pending, (state) => {
+
+      .addCase(sendUrl.pending, (state) => {
         state.loading = true;
         state.result = null;
         state.error = null;
       })
-      .addCase(sendData.fulfilled, (state, action) => {
+      .addCase(sendUrl.fulfilled, (state, action) => {
         console.log("🚀 ~ .addCase ~ action:", action);
         state.loading = false;
         state.result = action.payload;
         state.error = null;
       })
-      .addCase(sendData.rejected, (state, action) => {
+      .addCase(sendUrl.rejected, (state, action) => {
         state.loading = false;
         state.result = null;
         state.error = action.error.message;
@@ -55,5 +54,5 @@ const dataSlice = createSlice({
   },
 });
 
-export { sendData };
-export default dataSlice.reducer;
+export { sendUrl };
+export default UrlSlice.reducer;

@@ -7,11 +7,16 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ButtonAppBar from "./AppBar";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
+import { updateUser } from "../Store/UserSlice";
 
 const Edit = () => {
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.user);
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +25,8 @@ const Edit = () => {
     console.log("First Name:", firstName);
     console.log("Last Name:", lastName);
     console.log("Password:", password);
+
+    dispatch(updateUser({ firstName, lastName, password }));
 
     alert("Save Successfully");
   };
@@ -51,38 +58,32 @@ const Edit = () => {
               color: "#1976d2",
             }}
           >
-            you can
+            You can
           </Typography>
           <Typography
             sx={{ color: "#00000094", display: "flex", flexDirection: "row" }}
           >
             change your
             <Typography sx={{ fontWeight: "bold", ml: 1 }}>
-              {" "}
-              first_name{" "}
+              first name
             </Typography>
-            ,
             <Typography sx={{ fontWeight: "bold", ml: 1, mr: 1 }}>
-              {" "}
-              last_name{" "}
-            </Typography>{" "}
-            and your{" "}
-            <Typography sx={{ fontWeight: "bold", ml: 1 }}>
-              {" "}
-              Password{" "}
+              last name
             </Typography>
+            and your
+            <Typography sx={{ fontWeight: "bold", ml: 1 }}>password</Typography>
           </Typography>
           <Box sx={{ mt: 5 }}>
             <TextField
               sx={{ mr: 20 }}
-              id="outlined-basic"
+              id="firstName"
               label="First Name"
               variant="outlined"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
             <TextField
-              id="outlined-basic"
+              id="lastName"
               label="Last Name"
               variant="outlined"
               value={lastName}
@@ -96,7 +97,7 @@ const Edit = () => {
           >
             <TextField
               sx={{ mr: 20 }}
-              id="outlined-password-input"
+              id="password"
               label="Password"
               type="password"
               autoComplete="current-password"
@@ -107,10 +108,16 @@ const Edit = () => {
               style={{ padding: "16px 92px" }}
               variant="contained"
               onClick={handleSave}
+              disabled={loading}
             >
-              Save
+              {loading ? "Saving..." : "Save"}
             </Button>
           </Box>
+          {error && (
+            <Typography color="error" sx={{ mt: 2 }}>
+              {error}
+            </Typography>
+          )}
         </Box>
       </Container>
       <CardMedia
