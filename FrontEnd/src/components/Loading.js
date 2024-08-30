@@ -7,13 +7,14 @@ import {
   Button,
   CardMedia,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ButtonAppBar from "./AppBar";
 import img2 from "../images/img2.png";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
 
 const LoadingPage = () => {
+  const navigate = useNavigate();
   return (
     <>
       <ButtonAppBar />
@@ -61,14 +62,16 @@ const LoadingPage = () => {
                 width: "100%",
               }}
             >
-              <Link to="/main">
-                <Button variant="contained" sx={{ mr: "50px" }}>
-                  Decaptive
-                </Button>
-              </Link>
-              <Link to="/fetch">
-                <Button variant="outlined">Fetch Data</Button>
-              </Link>
+              <Button
+                variant="contained"
+                sx={{ mr: "50px" }}
+                onClick={() => navigate("/main")}
+              >
+                Decaptive
+              </Button>
+              <Button variant="outlined" onClick={() => navigate("/fetch")}>
+                Fetch Data
+              </Button>
             </Grid>
           </Grid>
           <Grid>

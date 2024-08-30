@@ -7,13 +7,14 @@ import {
   Button,
   CardMedia,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import ButtonAppBar from "./AppBar";
 import img2 from "../images/img2.png";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
   return (
     <>
       <ButtonAppBar />
@@ -61,14 +62,23 @@ const LandingPage = () => {
                 width: "100%",
               }}
             >
-              <Link to="/main">
-                <Button variant="contained" sx={{ mr: "50px" }}>
-                  Decaptive
-                </Button>
-              </Link>
-              <Link to="/fetch">
-                <Button variant="outlined">Fetch Data</Button>
-              </Link>
+              <Button
+                variant="contained"
+                sx={{ mr: "50px" }}
+                onClick={() => navigate("/main")}
+              >
+                Decaptive Url
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{ mr: "50px" }}
+                onClick={() => navigate("/fetch")}
+              >
+                Fetch Data
+              </Button>
+              <Button variant="contained" onClick={() => navigate("/text")}>
+                Decaptive Text
+              </Button>
             </Grid>
           </Grid>
           <Grid>

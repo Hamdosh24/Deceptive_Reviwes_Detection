@@ -23,7 +23,6 @@ const StyledTextField = styled(TextField)({
   },
 });
 const handleSend = (text) => {
-  console.log(text);
 };
 
 const Mainpage = () => {

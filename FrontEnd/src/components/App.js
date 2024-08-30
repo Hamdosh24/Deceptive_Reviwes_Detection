@@ -7,8 +7,7 @@ import AccountDash from "../DashBoard/AccountDash";
 import FeedDash from "../DashBoard/FeedDash";
 import MainLanding from "../Welcome/MainLanding.js";
 import HistoryDash from "../DashBoard/AccountHistoryDash";
-import DecaptiveDash from "../DashBoard/DecaptiveDash.js";
-import FetshDash from "../DashBoard/FetshDash.js";
+import DecaptiveText from "./text.js";
 
 const SignIn = lazy(() => import("./LogIn"));
 const Decaptive = lazy(() => import("./Decaptive"));
@@ -16,7 +15,6 @@ const SignUp = lazy(() => import("./sign_up"));
 const Fetch = lazy(() => import("./Fetch"));
 const History = lazy(() => import("./History"));
 const Feedback = lazy(() => import("./Feedback"));
-const About = lazy(() => import("./About"));
 const Edit = lazy(() => import("./Edit"));
 
 const router = createBrowserRouter([
@@ -35,16 +33,38 @@ const router = createBrowserRouter([
         <ContentDash />
       </Suspense>
     ),
-    children: [
-      {
-        path: "decaptive-dash",
-        element: (
-          <Suspense fallback={<LoadingPage />}>
-            <DecaptiveDash />
-          </Suspense>
-        ),
-      },
-    ],
+  },
+  {
+    path: "/accountdash",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <AccountDash />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/mainDash",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <ContentDash />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/feeddash",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <FeedDash />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/HistoryDash",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <HistoryDash />
+      </Suspense>
+    ),
   },
   {
     path: "/user",
@@ -55,7 +75,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "main",
+    path: "/main",
     element: (
       <Suspense fallback={<LoadingPage />}>
         <Decaptive />
@@ -63,26 +83,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "fetch",
+    path: "/text",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <DecaptiveText />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/fetch",
     element: (
       <Suspense fallback={<LoadingPage />}>
         <Fetch />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/sign-up",
-    element: (
-      <Suspense fallback={<LoadingPage />}>
-        <SignUp />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/sign-in",
-    element: (
-      <Suspense fallback={<LoadingPage />}>
-        <SignIn />
       </Suspense>
     ),
   },
@@ -103,14 +115,6 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/about",
-    element: (
-      <Suspense fallback={<LoadingPage />}>
-        <About />
-      </Suspense>
-    ),
-  },
-  {
     path: "/edit",
     element: (
       <Suspense fallback={<LoadingPage />}>
@@ -119,50 +123,27 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/sign-up",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <SignUp />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/sign-in",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <SignIn />
+      </Suspense>
+    ),
+  },
+
+  {
     path: "/mainDash",
     element: (
       <Suspense fallback={<LoadingPage />}>
         <ContentDash />
-      </Suspense>
-    ),
-  },
-  {
-    path: "accountdash",
-    element: (
-      <Suspense fallback={<LoadingPage />}>
-        <AccountDash />
-      </Suspense>
-    ),
-  },
-  {
-    path: "feeddash",
-    element: (
-      <Suspense fallback={<LoadingPage />}>
-        <FeedDash />
-      </Suspense>
-    ),
-  },
-  {
-    path: "HistoryDash",
-    element: (
-      <Suspense fallback={<LoadingPage />}>
-        <HistoryDash />
-      </Suspense>
-    ),
-  },
-  {
-    path: "decaptive-dash",
-    element: (
-      <Suspense fallback={<LoadingPage />}>
-        <DecaptiveDash />
-      </Suspense>
-    ),
-  },
-  {
-    path: "fetsh-dash",
-    element: (
-      <Suspense fallback={<LoadingPage />}>
-        <FetshDash />
       </Suspense>
     ),
   },

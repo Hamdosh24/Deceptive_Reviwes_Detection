@@ -20,7 +20,8 @@ import { signup } from "../Store/UserSlice";
 import { useDispatch } from "react-redux";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom"; // استيراد useNavigate
+import { useNavigate } from "react-router-dom";
+
 
 // Schema for validation
 const validationSchema = Yup.object({

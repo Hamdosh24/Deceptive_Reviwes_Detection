@@ -1,13 +1,12 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import { Box } from "@mui/material";
-import { Link } from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { HomeOutlined } from "@mui/icons-material";
 import Sidebar from "./Account";
+import { Navigate } from "react-router-dom";
 
 export default function ButtonAppBar() {
   return (
@@ -23,12 +22,14 @@ export default function ButtonAppBar() {
             sx={{ flexGrow: 1 }}
           ></Typography>
           <Box>
-            <Link to="/user">
-              <Button variant="text" sx={{ color: "white" }}>
-                <HomeOutlined sx={{ ml: "2px" }} />
-                Home
-              </Button>
-            </Link>
+            <Button
+              variant="text"
+              sx={{ color: "white" }}
+              onClick={() => Navigate("/user")}
+            >
+              <HomeOutlined sx={{ ml: "2px" }} />
+              Home
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>

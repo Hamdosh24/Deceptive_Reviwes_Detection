@@ -1,5 +1,12 @@
-import { Button, CardMedia, Container, TextField } from "@mui/material";
-import React, { useState } from "react";
+import {
+  Alert,
+  Button,
+  CardMedia,
+  Container,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import ButtonAppBar from "./AppBar";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -7,20 +14,26 @@ import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
 import img1 from "../images/regular-table-top.png";
 import img3 from "../images/pro-table-bottom.png";
 import { useDispatch, useSelector } from "react-redux";
-import { sendFeedback } from "../Store/SendFeed";
+import { sendFeedback, fetchFeedbacks } from "../Store/SendFeed";
 
 const Feedback = () => {
   const [feedback, setFeedback] = useState("");
   const dispatch = useDispatch();
-  const feedbackState = useSelector((state) => state.feedback);
+  const feedbackState = useSelector((state) => {
+    return state.feedback;
+  });
+
+  useEffect(() => {
+    dispatch(fetchFeedbacks());
+  }, [dispatch]);
 
   const handleAddFeedback = () => {
     if (feedback.trim()) {
-      dispatch(sendFeedback({ feedback }));
+      dispatch(sendFeedback({ feedbackData: { text: feedback } }));
+      dispatch(fetchFeedbacks());
       setFeedback("");
     }
   };
@@ -33,7 +46,7 @@ const Feedback = () => {
         component="img"
         image={img1}
         style={{ width: "50vh" }}
-        alt="dcd"
+        alt="Top Banner"
       />
       <Container>
         <TextField
@@ -47,36 +60,38 @@ const Feedback = () => {
           Submit
         </Button>
 
-        {/* عرض حالة التحميل أو الخطأ */}
-        {feedbackState.loading && <Typography>Sending feedback...</Typography>}
-        {feedbackState.error && (
-          <Typography color="error">Error: {feedbackState.error}</Typography>
+        {feedbackState?.loading && <Typography>Sending feedback...</Typography>}
+        {feedbackState?.error && (
+          <Alert severity="error">Error: {feedbackState?.error}</Alert>
         )}
 
-        {/* عرض قائمة الملاحظات */}
         <List sx={{ width: "100%", mt: 4, bgcolor: "background.paper" }}>
-          {feedbackState.result && (
-            <React.Fragment>
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="User" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="User Name"
-                  secondary={
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      {feedbackState.result.feedback}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-            </React.Fragment>
+          {feedbackState?.feedbacks && feedbackState?.feedbacks.length > 0 ? (
+            feedbackState?.feedbacks.map((fb) => (
+              <React.Fragment key={fb._id}>
+                <ListItem alignItems="flex-start">
+                  <ListItemAvatar>
+                    <Avatar />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={`${fb?.userId?.firstName} ${fb?.userId?.lastName}`}
+                    secondary={
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {fb.message}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+              </React.Fragment>
+            ))
+          ) : (
+            <Typography>No feedbacks available.</Typography>
           )}
         </List>
       </Container>
@@ -85,7 +100,7 @@ const Feedback = () => {
         component="img"
         image={img3}
         style={{ width: "35vh", height: "auto" }}
-        alt="dcd"
+        alt="Bottom Banner"
       />
     </>
   );
